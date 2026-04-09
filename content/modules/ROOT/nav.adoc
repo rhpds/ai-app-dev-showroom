@@ -1,18 +1,10 @@
-* xref:index.adoc[What is Showroom?]
+* xref:index.adoc[AI App Development from Desktop to Production]
 
-.Content Developer Guide
-* xref:quick-start.adoc[Quick Start]
-* xref:content-repo.adoc[Creating a Content Repository]
-* xref:agnosticv-config.adoc[AgnosticV Configuration]
-* xref:ui-config.adoc[UI Configuration]
-* xref:user-data.adoc[User Data and Variables]
-* xref:ocp4-role-reference.adoc[OCP4 Role Reference]
-* xref:vm-role-reference.adoc[VM Role Reference]
+.Getting Started
+* xref:01-overview.adoc[Workshop overview]
+* xref:02-details.adoc[Workshop details]
 
-.Showroom Developer Guide
-* xref:architecture.adoc[Architecture]
-* xref:deployer.adoc[Showroom Deployer]
-* xref:images.adoc[Showroom Images]
-* xref:nookbag.adoc[Nookbag UI]
-* xref:ocp-integration.adoc[OCP Integration]
-* xref:contributing.adoc[Contributing]
+.Workshop Modules
+* xref:03-module-01-provisioning-and-exploration.adoc[Module 1: Provisioning and exploration]
+* xref:04-module-02-develop-and-build.adoc[Module 2: Develop and build]
+* xref:05-module-03-deploy-and-verify.adoc[Module 3: Deploy and verify]

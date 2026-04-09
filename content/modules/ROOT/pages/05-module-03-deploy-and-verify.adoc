@@ -1,0 +1,226 @@
+= Module 3: Deploy and verify
+:source-highlighter: rouge
+:toc: macro
+:toclevels: 1
+
+In the previous modules, you provisioned a development workstation, built a customized AI chatbot, and pushed your code to Gitea. At most organizations, this is where the process stalls -- developers hand off code to operations teams, tickets get filed, and days (or weeks) pass before anything runs in production.
+
+Not at Parasol. The platform engineering team has set up automated CI/CD pipelines using OpenShift Pipelines (Tekton) and OpenShift GitOps (ArgoCD). Your code push has already triggered the pipeline. In this module, you'll observe the automated build and deployment process, then verify your AI chatbot is running live on OpenShift.
+
+== Learning objectives
+
+By the end of this module, you'll be able to:
+
+* Monitor an automated CI/CD pipeline through the Red Hat Developer Hub interface
+* Understand how OpenShift Pipelines (Tekton) builds container images from source code
+* Observe how OpenShift GitOps (ArgoCD) automatically syncs and deploys applications
+* Verify a live application running on OpenShift and access it through a route
+
+== Exercise 1: Watch the CI/CD pipeline in action
+
+The moment you pushed your code to Gitea in Module 2, a webhook triggered an OpenShift Pipeline. This pipeline pulls your source code, builds a container image, and pushes it to the cluster's container registry. You can watch all of this from the Red Hat Developer Hub interface.
+
+=== View the pipeline run in RHDH
+
+. Return to your Red Hat Developer Hub tab in the browser. If you closed it, open it again:
++
+link:{rhdh_url}[Red Hat Developer Hub^]
+
+. Navigate to your component. You can find it in the **Catalog** by searching for your component name, or from the link saved during Module 1.
++
+// TODO: Screenshot of navigating to the component in RHDH catalog
+image::rhdh-catalog-component.png[Component in Red Hat Developer Hub catalog,link=self,window=blank,width=700]
+
+. Click on the **CI** tab in the component view. This tab shows your OpenShift Pipelines (Tekton) pipeline runs.
++
+// TODO: Screenshot of the CI tab showing the pipeline run
+image::rhdh-ci-tab.png[CI tab showing pipeline run in progress,link=self,window=blank,width=700]
+
+. You should see a pipeline run in progress (or recently completed). Click on the pipeline run to see its details.
++
+// TODO: Screenshot of the pipeline run details showing individual tasks
+image::rhdh-pipeline-run-details.png[Pipeline run details with individual tasks,link=self,window=blank,width=700]
+
+=== Understand the pipeline stages
+
+The pipeline performs several stages automatically:
+
+. **Fetch source**: Pulls your code from the Gitea repository
+. **Build image**: Uses the `Containerfile` to build your container image (the same one you built locally in Module 2)
+. **Push image**: Pushes the built image to the cluster's internal container registry
+. **Update deployment manifest**: Updates the deployment configuration with the new image reference
++
+// TODO: Screenshot of pipeline stages/tasks completing
+image::rhdh-pipeline-stages.png[Pipeline stages completing successfully,link=self,window=blank,width=700]
+
+. Wait for the pipeline to complete. All stages should show a green checkmark.
++
+TIP: This automated pipeline replaces the 3-5 day manual handoff process at Parasol. Code is built and validated automatically, with the same Containerfile used locally and in production -- eliminating the "works on my machine" problem.
+
+=== Verify
+
+Confirm that:
+
+* The pipeline run is visible in the RHDH CI tab
+* All pipeline stages completed successfully (green checkmarks)
+* The container image was built and pushed to the registry
+
+== Exercise 2: Observe the GitOps deployment
+
+With the container image built and pushed, ArgoCD takes over. OpenShift GitOps (ArgoCD) watches for changes to the deployment manifests and automatically syncs them to the cluster. This means your application gets deployed without any manual intervention.
+
+=== View the ArgoCD sync in RHDH
+
+. In your component view in Red Hat Developer Hub, click on the **CD** tab.
++
+// TODO: Screenshot of the CD tab showing ArgoCD sync
+image::rhdh-cd-tab.png[CD tab showing ArgoCD sync status,link=self,window=blank,width=700]
+
+. You should see the ArgoCD application for your chatbot. It will show one of the following states:
++
+* **Syncing**: ArgoCD has detected the new image and is deploying it
+* **Synced**: The deployment is complete and matches the desired state
+* **Healthy**: The application is running and passing health checks
++
+// TODO: Screenshot of ArgoCD application in synced/healthy state
+image::rhdh-argocd-synced.png[ArgoCD application showing synced and healthy status,link=self,window=blank,width=700]
+
+. Click on the ArgoCD application link to see more details about the deployed resources.
++
+// TODO: Screenshot of ArgoCD application details showing Kubernetes resources
+image::rhdh-argocd-details.png[ArgoCD application details with Kubernetes resources,link=self,window=blank,width=700]
+
+=== Verify
+
+Confirm that:
+
+* The ArgoCD application is visible in the RHDH CD tab
+* The sync status shows **Synced**
+* The health status shows **Healthy**
+
+== Exercise 3: Verify the live application on OpenShift
+
+Your AI chatbot is now running in production on OpenShift. Let's verify it works by accessing it through the OpenShift console and its public route.
+
+=== View the application in the OpenShift console
+
+. Open the OpenShift console:
++
+link:{openshift_console_url}[OpenShift Console^]
++
+Log in with:
++
+* **Username**: `{user}`
+* **Password**: `{password}`
+
+. Switch to the **Developer** perspective using the toggle in the left navigation.
++
+// TODO: Screenshot of switching to Developer perspective
+image::ocp-developer-perspective.png[Switching to Developer perspective in OpenShift console,link=self,window=blank,width=700]
+
+. Navigate to the **Topology** view. You should see your chatbot application deployed and running.
++
+// TODO: Screenshot of Topology view showing the deployed chatbot application
+image::ocp-topology-chatbot.png[Topology view showing deployed chatbot application,link=self,window=blank,width=700]
+
+. Click on the application in the Topology view to see its details:
++
+* **Pods**: Your chatbot container running as a pod
+* **Builds**: The pipeline build history
+* **Routes**: The public URL to access the application
++
+// TODO: Screenshot of application details in Topology view
+image::ocp-topology-details.png[Application details showing pods and routes,link=self,window=blank,width=700]
+
+=== Access the live chatbot
+
+. Find the **Route** for your application. You can see it in the Topology view (click the external link icon on the application node) or navigate to:
++
+link:{openshift_console_url}/k8s/ns/{user}-project/routes[Routes^]
++
+// TODO: Screenshot of the route in the OpenShift console
+image::ocp-route.png[Application route in OpenShift console,link=self,window=blank,width=700]
+
+. Click on the route URL to open your chatbot in a new browser tab. This is your application running live on OpenShift -- accessible to anyone with the URL.
++
+// TODO: Screenshot of the live chatbot running on OpenShift
+image::chatbot-live-on-openshift.png[Chatbot application running live on OpenShift,link=self,window=blank,width=700]
+
+. Test the live chatbot with a few messages:
++
+[source,text]
+----
+Ahoy! Can you tell me about Parasol Insurance's claims process?
+----
++
+[source,text]
+----
+What makes Parasol Insurance different from other providers?
+----
++
+// TODO: Screenshot of the chatbot responding in production with pirate voice
+image::chatbot-production-pirate.png[Live chatbot responding with pirate voice personality,link=self,window=blank,width=700]
+
+. Verify that:
++
+* The chatbot responds with the pirate voice personality you configured in Module 2
+* The responses are high quality (coming from the MaaS endpoint, not the small local model)
+* The application is running on OpenShift, not on your local VM
+
+=== Verify
+
+Confirm that:
+
+* The application is visible in the OpenShift Topology view
+* The application pod is running and healthy
+* The route is accessible and the chatbot responds
+* The pirate voice customization is working in production
+* Response quality matches what you saw locally with the MaaS configuration
+
+== Module summary
+
+You've just witnessed the full power of Red Hat's desktop-to-production workflow. Code pushed from your developer workstation was automatically built, deployed, and made accessible -- without a single manual handoff.
+
+**What you accomplished:**
+
+* Monitored an automated CI/CD pipeline build through the RHDH CI tab
+* Observed ArgoCD automatically detect and deploy the new container image through the RHDH CD tab
+* Verified the live application running on OpenShift through the Topology view
+* Accessed and tested the production chatbot via its public route
+
+**Key takeaways:**
+
+* OpenShift Pipelines (Tekton) automates the build process -- the same Containerfile used locally builds the production image
+* OpenShift GitOps (ArgoCD) automates deployment -- no manual intervention between code push and production
+* Red Hat Developer Hub provides a single pane of glass for CI/CD visibility
+* The entire process -- from code push to production -- takes minutes, not days
+* Platform engineers set up the guardrails once, and developers benefit automatically
+
+== Workshop conclusion
+
+Congratulations! You've completed the AI App Development from Desktop to Production workshop.
+
+In a single session, you proved that Parasol Insurance can:
+
+* **Onboard developers in minutes** instead of weeks -- Red Hat Developer Hub self-service templates eliminate the setup bottleneck
+* **Experiment with AI safely** -- Podman Desktop with AI Lab provides a governed, local-first approach that eliminates shadow AI
+* **Develop with full control** -- container-native workflows on the desktop with access to approved MaaS endpoints
+* **Deploy to production automatically** -- OpenShift Pipelines and ArgoCD eliminate the 3-5 day manual handoff cycle
+* **Close the production gap** -- the same Containerfile and configuration used locally works in production
+
+The "production gap" that kills so many AI projects? At Parasol, it no longer exists.
+
+=== What's next
+
+* Share your experience with your team and manager
+* Explore the Red Hat Developer Hub catalog for more templates and golden paths
+* Investigate OpenShift AI for more advanced model serving and fine-tuning
+* Consider how these patterns apply to your own organization's AI initiatives
+
+=== Resources
+
+* link:https://developers.redhat.com/developer-hub[Red Hat Developer Hub^]
+* link:https://developers.redhat.com/products/podman-desktop/overview[Red Hat build of Podman Desktop^]
+* link:https://docs.redhat.com/en/documentation/openshift_container_platform/{ocp_version}/html/cicd/pipelines[OpenShift Pipelines documentation^]
+* link:https://docs.redhat.com/en/documentation/openshift_container_platform/{ocp_version}/html/cicd/gitops[OpenShift GitOps documentation^]
+* link:https://developers.redhat.com/products/openshift-ai/overview[OpenShift AI^]

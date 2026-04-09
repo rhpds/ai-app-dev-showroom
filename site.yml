@@ -1,7 +1,7 @@
 ---
 site:
-  title: Showroom Template Demo
-  url: https://github.com/rhpds/showroom_template_nookbag
+  title: AI App Development from Desktop to Production
+  url: https://github.com/rhpds/ai-app-dev-showroom
   start_page: modules::index.adoc
 
 content:

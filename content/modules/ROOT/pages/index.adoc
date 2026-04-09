@@ -1,94 +1,59 @@
-= What is Showroom?
-:navtitle: What is Showroom?
+= AI App Development from Desktop to Production
 
-Showroom is a web-based lab instruction platform for the https://demo.redhat.com[Red Hat Demo Platform].
-It combines rendered AsciiDoc content with embedded terminals, consoles, and interactive tools -- giving workshop and demo participants everything they need in a single browser tab.
+Welcome to the AI App Development from Desktop to Production workshop!
 
-== What Users See
+Many generative AI projects are abandoned after proof of concept -- costing organizations billions. This is often due to a lack of foresight as well as the challenges organizations face when moving concepts to production -- mismatched dependencies, untrusted or malicious packages, unvetted Model Context Protocol (MCP) tools or large language models (LLMs), and more.
 
-When a participant opens their Showroom URL they get a split-pane interface:
+In this workshop, you will learn how Red Hat addresses these challenges with innovative new developer tools for local experimentation, and how platform engineers enforce policy and IT controls as those ideas move into production.
 
-* **Left pane** -- step-by-step lab instructions rendered from an https://antora.org[Antora] site you author in AsciiDoc.
-* **Right pane** -- one or more tabs such as:
-** A web terminal (SSH to a bastion, containerised CLI tools, or both).
-** The OpenShift web console embedded in an iframe.
-** A VS Code editor (Code Server).
-** A VNC desktop (noVNC).
-** Any external URL you choose.
+== What you'll learn
 
-The UI layout, tab names, and tab URLs are all controlled by a simple `ui-config.yml` file that lives in your content repository.
+In this workshop, you will:
 
-== How It Gets Deployed
+* Scaffold new AI experimentation projects using Red Hat Developer Hub
+* Use Red Hat Desktop and the Red Hat build of Podman Desktop to experiment with AI apps on the desktop
+* Develop and customize AI-powered applications locally with container-native workflows
+* Move applications from desktop to production using OpenShift Pipelines and ArgoCD GitOps principles
 
-This Ansible collection -- `agnosticd.showroom` -- is the primary way Showroom instances are deployed on the Red Hat Demo Platform.
-Depending on the environment type, you use one of two roles:
+== Who this is for
 
-[cols="1,3",options="header"]
-|===
-|Role |Use when...
+This workshop is designed for developers and platform engineers who want to understand how Red Hat eliminates the "production gap" that causes so many AI projects to fail.
 
-|`ocp4_workload_showroom`
-|Your lab runs on an OpenShift 4 cluster.
-The role deploys Showroom as a pod using a Helm chart, complete with content rendering, terminals, and an OpenShift `Route`.
+**Experience level**: Intermediate
 
-|`vm_workload_showroom`
-|Your lab runs on a VM (RHEL, Fedora, etc.).
-The role deploys Showroom with rootless Podman, Traefik for TLS, and systemd for lifecycle management.
-|===
+== Prerequisites
 
-Both roles follow the same basic flow:
+Before starting this workshop, you should have:
 
-. Clone your Antora content repository.
-. Inject runtime variables (credentials, hostnames, GUIDs) as AsciiDoc attributes.
-. Render the content to HTML.
-. Serve the content alongside the terminal and tab services you configured.
-. Publish the final URL back to the user.
+* Basic familiarity with containers and container images
+* Some experience with Git and version control
+* A general understanding of CI/CD concepts
 
-== Key Concepts
+No prior experience with OpenShift, Podman Desktop, or AI/ML is required.
 
-Content repository::
-A Git repo containing your AsciiDoc lab instructions, structured as an Antora component.
-You typically fork https://github.com/rhpds/showroom_template_nookbag[showroom_template_nookbag] and add your own pages.
-See xref:content-repo.adoc[].
+== Workshop environment
 
-AgnosticV catalog item::
-The YAML configuration in the https://github.com/rhpds/agnosticv[agnosticv] repository that ties your content repo to an environment on the Red Hat Demo Platform.
-See xref:agnosticv-config.adoc[].
+Your lab environment has been pre-configured with everything you need:
 
-User data::
-A set of key-value pairs (hostnames, passwords, URLs) written by infrastructure roles during provisioning and automatically injected into your content as Antora attributes.
-See xref:user-data.adoc[].
+* An OpenShift cluster with Red Hat Developer Hub, OpenShift Pipelines, and OpenShift GitOps
+* A RHEL 10 virtual machine with Red Hat build of Podman Desktop (provisioned during the lab)
+* A Gitea repository for source code management
+* A Model as a Service (MaaS) endpoint served from OpenShift AI
 
-UI configuration::
-A `ui-config.yml` file in your content repo that defines the tabs, layout width, and dynamic URLs shown alongside your lab instructions.
-See xref:ui-config.adoc[].
+Access details:
 
-== Where to Start
+* OpenShift console: link:{openshift_console_url}[OpenShift Console^]
+* Username: `{user}`
+* Password: `{password}`
 
-[cols="1,3",options="header"]
-|===
-|Goal |Page
+NOTE: All environment details and credentials are available in the lab interface.
 
-|Get a Showroom lab running quickly
-|xref:quick-start.adoc[]
+== Estimated time
 
-|Create or structure a content repo
-|xref:content-repo.adoc[]
+This workshop will take approximately **2 hours** to complete.
 
-|Wire up an AgnosticV catalog item
-|xref:agnosticv-config.adoc[]
+You can work at your own pace.
 
-|Understand the full architecture
-|xref:architecture.adoc[]
+== Let's get started!
 
-|Contribute to Showroom itself
-|xref:contributing.adoc[]
-|===
-
-== Related Projects
-
-* https://github.com/agnosticd/showroom[agnosticd.showroom collection] -- this Ansible collection (you are here).
-* https://github.com/rhpds/showroom_template_nookbag[showroom_template_nookbag] -- the recommended content repo template.
-* https://github.com/rhpds/showroom-deployer[showroom-deployer] -- Helm charts that power OCP deployments.
-* https://github.com/rhpds/showroom-images[showroom-images] -- container images (content server, terminals, Antora, etc.).
-* https://github.com/rhpds/nookbag[nookbag] -- the zero-touch UI bundle.
+Click on **Workshop overview** in the navigation to begin your learning journey.

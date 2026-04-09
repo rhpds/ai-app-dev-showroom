@@ -1,0 +1,90 @@
+= Workshop overview
+:toc:
+:toc-placement: preamble
+:icons: font
+
+== Your role and mission
+
+You're a developer at Parasol Insurance, and you've just been onboarded to help the team build AI-powered applications. Today, onboarding a new developer to Parasol's application landscape takes weeks of knowledge transfer. Getting code from a developer's machine into a running environment takes 3-5 days of manual handoffs. And shadow AI is a growing concern -- developers across the company are using random third-party AI services that expose the company to data privacy, security, and compliance risks.
+
+Your manager has explained: "We need to move fast on AI, but we can't keep doing it the way we have been. The board wants AI-powered customer experiences, but IT leadership is worried about ungoverned AI usage and the gap between what works on a laptop and what runs in production. We need you to prove there's a better way."
+
+**Your assignment**: Use Red Hat's developer tools to build and customize an AI-powered chatbot application -- starting from your desktop and taking it all the way to production on OpenShift -- in a single session.
+
+**The objective**: Demonstrate that Parasol can go from idea to production AI application without the weeks-long handoff cycles, while maintaining IT governance and security controls.
+
+== Success criteria for your mission
+
+By the end of this workshop, you'll have practical skills to address Parasol's challenges:
+
+* **Scaffold a development environment with Red Hat Developer Hub** -- eliminate weeks of onboarding by self-servicing a fully configured workstation in minutes
+* **Experiment with AI on the desktop using Podman Desktop** -- explore AI capabilities locally without relying on ungoverned third-party services
+* **Develop and customize an AI application** -- modify an AI chatbot to use Parasol's approved Model as a Service endpoint instead of unvetted models
+* **Automate the path to production** -- use OpenShift Pipelines and ArgoCD to eliminate the 3-5 day manual deployment cycle
+* **Verify a production deployment** -- confirm your AI application is running live on OpenShift, accessible to end users
+
+**Technical outcome**: Hands-on experience with the full AI application lifecycle, from local development through production deployment.
+
+**Business benefit**: Reduce Parasol's time-to-production from days to minutes while eliminating shadow AI risks.
+
+== Target audience
+
+This workshop is designed for:
+
+* **Developers** who want to learn how to build AI applications using container-native workflows on the desktop
+* **Platform engineers** who need to understand the guardrails available when moving AI experiments to production
+* **Architects** evaluating Red Hat's approach to closing the AI production gap
+* Anyone interested in hands-on experience with Red Hat Developer Hub, Podman Desktop, OpenShift Pipelines, and OpenShift GitOps
+
+== Prerequisites
+
+You should have:
+
+* Basic familiarity with containers and container images
+* Some experience with Git and version control
+* A general understanding of CI/CD concepts
+* Comfort using a terminal and command-line tools
+
+== Parasol's challenges
+
+**The situation**: Parasol Insurance is under pressure to deliver AI-powered customer experiences, but the organization's current development and deployment processes are holding them back.
+
+**Current challenges**:
+
+* **Slow developer onboarding**: Getting a new developer productive takes weeks of knowledge transfer and environment setup -- slowing down AI initiatives before they even start
+* **Manual deployment handoffs**: Moving code from a developer's machine into a running environment takes 3-5 days of manual handoffs between teams -- creating a bottleneck that kills momentum
+* **Shadow AI proliferation**: Developers are experimenting with random third-party AI services (ChatGPT APIs, Hugging Face endpoints, unvetted open-source models) -- exposing Parasol to data privacy, security, and compliance risks
+* **The production gap**: Proof-of-concept AI applications that work on a developer's laptop frequently fail when moved to production -- mismatched dependencies, missing configurations, and untested integrations cause costly delays
+
+**The opportunity**: Red Hat's developer tools and platform can address all of these challenges, and you've been selected to prove it.
+
+== Your vision of success
+
+If this approach works for Parasol, here are the potential improvements:
+
+**Immediate improvements** (this sprint):
+
+* **Developer onboarding**: Self-service environment provisioning via Red Hat Developer Hub -- minutes instead of weeks
+* **Local AI experimentation**: Podman Desktop with AI Lab provides a governed, local-first approach to AI development -- no more shadow AI
+
+**Strategic benefits** (this quarter):
+
+* **Automated deployments**: OpenShift Pipelines and ArgoCD eliminate manual handoffs -- code to production in minutes, not days
+* **Governed AI usage**: MaaS endpoints served from OpenShift AI give developers access to approved models -- innovation without risk
+* **Reproducible environments**: Container-native development means what works locally works in production -- closing the production gap for good
+
+**Success metric**: A working AI application, built on the desktop and running in production, delivered in a single session -- proving Parasol can innovate with AI at speed without compromising governance.
+
+== Common questions
+
+**"Do I need AI or machine learning experience?"**
+-> No. This workshop focuses on the application development and deployment workflow. The AI model is provided as a service -- you'll interact with it, but you don't need to train or tune it.
+
+**"What if I'm more interested in the platform engineering side?"**
+-> Modules 2 and 3 focus heavily on the CI/CD pipeline and GitOps deployment model. You'll see how platform engineers set up guardrails that developers benefit from automatically.
+
+**"Will I be using my own laptop for development?"**
+-> You'll use a RHEL 10 virtual machine provisioned through Red Hat Developer Hub. It comes pre-configured with all the tools you need, including the Red Hat build of Podman Desktop.
+
+**"Is this just OpenShift? I already know OpenShift."**
+-> This workshop highlights the full developer experience -- from desktop tools (Podman Desktop, AI Lab extension) through Red Hat Developer Hub to production deployment. Even experienced OpenShift users will learn about the new desktop-to-production workflow.

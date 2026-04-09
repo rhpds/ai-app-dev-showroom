@@ -1,0 +1,76 @@
+= Workshop details
+:toc:
+:toc-placement: preamble
+:icons: font
+
+== Timing and schedule
+
+=== Full workshop (2 hours)
+
+* **Module 1**: Provisioning and exploration (40 minutes)
+* **Module 2**: Develop and build (40 minutes)
+* **Module 3**: Deploy and verify (40 minutes)
+
+=== Abbreviated workshop (1 hour)
+
+* **Module 1**: Provisioning and exploration (25 minutes)
+* **Module 2**: Develop and build (20 minutes)
+* **Module 3**: Deploy and verify (15 minutes)
+
+== Module overview
+
+=== Module 1: Provisioning and exploration
+
+You'll use Red Hat Developer Hub to self-service a fully configured RHEL 10 virtual machine with the Red Hat build of Podman Desktop pre-installed. Then you'll explore Podman Desktop and its extensions -- including the AI Lab extension -- and instantiate an AI chatbot recipe to chat with a local model.
+
+**Key technologies**: Red Hat Developer Hub, RHEL 10, Podman Desktop, AI Lab extension
+
+=== Module 2: Develop and build
+
+After experimenting with a local model, you'll notice the performance is limited. You'll modify the chatbot's source code to customize the system prompt, rebuild the container image with Podman Desktop, and run it locally using environment variables that connect to Parasol's approved Model as a Service (MaaS) endpoint on OpenShift AI. Finally, you'll push your changes to Gitea.
+
+**Key technologies**: Podman Desktop, VS Code, Containerfile, Gitea, OpenShift AI (MaaS)
+
+=== Module 3: Deploy and verify
+
+Your code push triggers an automated CI/CD pipeline. You'll watch the OpenShift Pipeline (Tekton) build your application image via the Red Hat Developer Hub CI tab, then observe ArgoCD automatically sync and deploy the application to OpenShift via the CD tab. Finally, you'll verify your AI chatbot is running live on the cluster.
+
+**Key technologies**: OpenShift Pipelines (Tekton), OpenShift GitOps (ArgoCD), Red Hat Developer Hub
+
+== Technical requirements
+
+=== Software versions
+
+* Red Hat OpenShift {ocp_version}
+* Red Hat Developer Hub 1.9
+* OpenShift Pipelines 1.21
+* OpenShift GitOps 1.19
+* Red Hat build of Podman Desktop (latest)
+* Red Hat Enterprise Linux 10 (virtual machine)
+
+=== Environment access
+
+All resources are provided during the workshop. You will need:
+
+* A modern web browser (Chrome, Firefox, or Edge recommended)
+* The lab interface (Showroom) -- provides instructions and embedded console
+
+=== Access credentials
+
+* **OpenShift console**: link:{openshift_console_url}[{openshift_console_url}^]
+* **Username**: `{user}`
+* **Password**: `{password}`
+* **Red Hat Developer Hub**: Access through the OpenShift console or direct link provided in Module 1
+* **Gitea**: Access through the link provided in Module 1
+
+NOTE: Your environment is pre-configured. No additional setup is required before starting Module 1.
+
+== Authors and contributors
+
+**Lead Developer**: Ian Lawson
+
+**Additional Developers**: James Falkner, Juliano Mohr
+
+**RHDP Team**: Juliano Mohr, Rich Naszcyniec
+
+**Lab ID**: LB2862

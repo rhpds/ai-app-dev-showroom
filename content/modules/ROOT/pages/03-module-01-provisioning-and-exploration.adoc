@@ -1,0 +1,275 @@
+= Module 1: Provisioning and exploration
+:source-highlighter: rouge
+:toc: macro
+:toclevels: 1
+
+It's your first day working on AI initiatives at Parasol Insurance. Normally, getting a new developer productive takes weeks -- setting up environments, requesting access, installing tools, and navigating endless documentation. But Parasol has adopted Red Hat Developer Hub to eliminate that friction.
+
+In this module, you'll self-service a fully configured development workstation, explore the Red Hat build of Podman Desktop and its extensions, and get your first AI chatbot up and running locally -- all in about 40 minutes.
+
+== Learning objectives
+
+By the end of this module, you'll be able to:
+
+* Use Red Hat Developer Hub to self-service a RHEL 10 virtual machine with pre-installed developer tools
+* Navigate the Red Hat build of Podman Desktop and explore its extensions
+* Install and use the AI Lab extension to work with AI models locally
+* Instantiate an AI chatbot recipe and interact with a local model
+
+== Exercise 1: Provision your development environment with Red Hat Developer Hub
+
+Your team lead has told you: "Just go to Developer Hub, pick the AI developer workstation template, and you'll have everything you need." No tickets, no waiting, no manual setup.
+
+You'll use Red Hat Developer Hub to provision a RHEL 10 virtual machine that comes pre-configured with the Red Hat build of Podman Desktop and other essential tools.
+
+=== Access Red Hat Developer Hub
+
+. Open Red Hat Developer Hub in your browser:
++
+link:{rhdh_url}[Red Hat Developer Hub^]
++
+NOTE: If you don't see this link in your environment, you can access Red Hat Developer Hub from the OpenShift console at link:{openshift_console_url}[{openshift_console_url}^] by navigating to the Developer Hub link in the application menu.
+
+. Log in using your credentials:
++
+* **Username**: `{user}`
+* **Password**: `{password}`
++
+// TODO: Screenshot of RHDH login page
+image::rhdh-login.png[Red Hat Developer Hub login page,link=self,window=blank,width=700]
+
+. After logging in, you'll land on the Red Hat Developer Hub home page. Take a moment to look around -- this is the central hub where Parasol's developers discover and provision everything they need.
++
+// TODO: Screenshot of RHDH home page
+image::rhdh-home.png[Red Hat Developer Hub home page,link=self,window=blank,width=700]
+
+=== Create your AI developer workstation
+
+. Click on **Create...** in the left navigation menu, then select the **AI Developer Workstation** template from the catalog.
++
+// TODO: Screenshot of template catalog with AI Developer Workstation highlighted
+image::rhdh-template-catalog.png[Template catalog showing AI Developer Workstation,link=self,window=blank,width=700]
+
+. Fill in the template form with the following values:
++
+* **Name**: Leave as the default or enter a name for your workstation
+* Accept the remaining defaults
++
+// TODO: Screenshot of the template form being filled in
+image::rhdh-template-form.png[AI Developer Workstation template form,link=self,window=blank,width=700]
+
+. Click **Next** to review your selections, then click **Create** to begin provisioning.
++
+// TODO: Screenshot of the provisioning progress
+image::rhdh-provisioning.png[Provisioning in progress,link=self,window=blank,width=700]
+
+. Wait for the provisioning to complete. Red Hat Developer Hub is doing several things behind the scenes:
++
+* Provisioning a RHEL 10 virtual machine via OpenShift Virtualization (KubeVirt)
+* Installing the Red Hat build of Podman Desktop
+* Scaffolding a Git repository in Gitea for your application code
+* Configuring CI/CD pipelines for your project
++
+TIP: This process takes a few minutes. In a traditional setup, this would take days or weeks of manual work across multiple teams.
+
+. Once provisioning is complete, you'll see a success page with links to your new resources.
++
+// TODO: Screenshot of the completed provisioning page with resource links
+image::rhdh-provisioning-complete.png[Provisioning complete with resource links,link=self,window=blank,width=700]
+
+=== Verify your provisioned resources
+
+. From the success page, note the links to:
++
+* Your **RHEL 10 virtual machine** console
+* Your **Gitea repository** (the scaffolded source code)
+* Your **component** in Red Hat Developer Hub
++
+. Click on the link to your component in Red Hat Developer Hub to view its details page. This is where you'll later see CI/CD activity.
++
+// TODO: Screenshot of the component overview page in RHDH
+image::rhdh-component-overview.png[Component overview in Red Hat Developer Hub,link=self,window=blank,width=700]
+
+=== Verify
+
+You should now have:
+
+* A RHEL 10 virtual machine running on the cluster
+* A Gitea repository with scaffolded application code
+* A component registered in Red Hat Developer Hub
+
+NOTE: Keep the Red Hat Developer Hub tab open -- you'll return to it in Module 3.
+
+== Exercise 2: Explore the Red Hat build of Podman Desktop
+
+Now that your workstation is provisioned, let's explore the Red Hat build of Podman Desktop -- the primary tool Parasol developers use for container-native development on the desktop.
+
+=== Connect to your virtual machine
+
+. Open a VNC session to your RHEL 10 virtual machine. You can access it from the link provided in the provisioning success page, or through the OpenShift console:
++
+link:{openshift_console_url}/k8s/ns/{user}-devspaces/kubevirt.io~v1~VirtualMachine[OpenShift Console - Virtual Machines^]
++
+// TODO: Screenshot of VNC console connection
+image::vnc-console.png[VNC console connection to RHEL 10 VM,link=self,window=blank,width=700]
+
+. Log in to the virtual machine desktop using the provided credentials.
++
+// TODO: Screenshot of RHEL 10 desktop after login
+image::rhel-desktop.png[RHEL 10 desktop environment,link=self,window=blank,width=700]
+
+=== Launch Podman Desktop
+
+. Find and launch the **Red Hat build of Podman Desktop** from the application menu or desktop shortcut.
++
+// TODO: Screenshot of launching Podman Desktop
+image::podman-desktop-launch.png[Launching Podman Desktop from RHEL 10,link=self,window=blank,width=700]
+
+. Once Podman Desktop opens, take a moment to explore the interface:
++
+* **Dashboard**: Overview of your container environment
+* **Containers**: Running and stopped containers
+* **Images**: Available container images
+* **Pods**: Grouped containers
+* **Volumes**: Persistent storage
++
+// TODO: Screenshot of Podman Desktop dashboard
+image::podman-desktop-dashboard.png[Podman Desktop dashboard overview,link=self,window=blank,width=700]
+
+=== Explore extensions
+
+. Click on **Extensions** in the left navigation to see what's available. The Red Hat build of Podman Desktop supports a rich extension ecosystem.
++
+// TODO: Screenshot of extensions page
+image::podman-desktop-extensions.png[Podman Desktop extensions page,link=self,window=blank,width=700]
+
+. Browse through the available extensions. You'll notice extensions for:
++
+* Container registries
+* Kubernetes and OpenShift integration
+* Podman machine management
+* And more
++
+TIP: Extensions are how Podman Desktop stays lightweight while still supporting specialized workflows like AI development.
+
+== Exercise 3: Install the AI Lab extension and run a chatbot recipe
+
+At Parasol, developers need a safe, local way to experiment with AI -- no more shadow AI using random third-party services. The AI Lab extension for Podman Desktop provides exactly this: a governed, local-first approach to AI experimentation.
+
+=== Install the AI Lab extension
+
+. In the Extensions view, search for **AI Lab** or locate it in the catalog.
++
+// TODO: Screenshot of AI Lab extension in the catalog
+image::ai-lab-extension-catalog.png[AI Lab extension in the catalog,link=self,window=blank,width=700]
+
+. Click **Install** to add the AI Lab extension to your Podman Desktop.
++
+// TODO: Screenshot of AI Lab installation progress
+image::ai-lab-installing.png[Installing AI Lab extension,link=self,window=blank,width=700]
+
+. Once installed, you'll see a new **AI Lab** icon in the left navigation.
++
+// TODO: Screenshot of AI Lab icon appearing in navigation
+image::ai-lab-nav.png[AI Lab icon in Podman Desktop navigation,link=self,window=blank,width=700]
+
+=== Explore the AI Lab
+
+. Click on the **AI Lab** icon to open it. Take a moment to explore:
++
+* **Catalog**: Pre-built AI recipes and models
+* **Models**: Available AI models you can run locally
+* **Playground**: A place to experiment with models interactively
++
+// TODO: Screenshot of AI Lab main page
+image::ai-lab-main.png[AI Lab main page,link=self,window=blank,width=700]
+
+=== Try the AI playground
+
+. Navigate to the **Playground** section in AI Lab.
+
+. Select a small model from the available list. Since you're running locally, choose one of the smaller models to keep things responsive.
++
+// TODO: Screenshot of model selection in playground
+image::ai-lab-playground-model.png[Selecting a model in the AI playground,link=self,window=blank,width=700]
+
+. Once the model loads, try chatting with it. Type a simple question like:
++
+[source,text]
+----
+What is Parasol Insurance and what services do they provide?
+----
++
+// TODO: Screenshot of a chat exchange in the playground
+image::ai-lab-playground-chat.png[Chatting with a model in the AI playground,link=self,window=blank,width=700]
+
+. Notice the response quality and speed. The local model works, but it's quite small -- the responses may be generic or slow. That's expected. You'll address this limitation in Module 2.
++
+TIP: The AI playground is useful for quick experimentation. For building actual applications, you'll use the recipe catalog.
+
+=== Instantiate the chatbot recipe
+
+. Navigate to the **Catalog** section in AI Lab.
+
+. Find the **Chatbot** recipe in the catalog. This is a pre-built application template that provides a web-based chat interface backed by an AI model.
++
+// TODO: Screenshot of the chatbot recipe in the catalog
+image::ai-lab-catalog-chatbot.png[Chatbot recipe in the AI Lab catalog,link=self,window=blank,width=700]
+
+. Click on the chatbot recipe to see its details, then click **Start** to instantiate it.
++
+// TODO: Screenshot of the chatbot recipe detail page with Start button
+image::ai-lab-chatbot-start.png[Starting the chatbot recipe,link=self,window=blank,width=700]
+
+. Wait for the recipe to pull the required model and start the application. This may take a few minutes as it downloads the model and builds the containers.
++
+// TODO: Screenshot of the recipe starting/pulling
+image::ai-lab-chatbot-pulling.png[Chatbot recipe pulling model and starting,link=self,window=blank,width=700]
+
+. Once the recipe is running, click the link to open the chatbot application in your browser.
++
+// TODO: Screenshot of the running chatbot application
+image::ai-lab-chatbot-running.png[Chatbot application running locally,link=self,window=blank,width=700]
+
+. Try asking the chatbot a few questions:
++
+[source,text]
+----
+Hello! Can you help me with an insurance claim?
+----
++
+[source,text]
+----
+What types of coverage does Parasol Insurance offer?
+----
+
+. Notice that the chatbot responds, but the answers are generic -- it doesn't know anything specific about Parasol Insurance, and the local model is quite small with limited performance. In the next module, you'll customize this application and connect it to a more powerful model.
+
+=== Verify
+
+Confirm that:
+
+* The AI Lab extension is installed in Podman Desktop
+* The chatbot recipe is running locally
+* You can interact with the chatbot through the web interface
+
+== Module summary
+
+You've successfully completed the provisioning and exploration module -- and it only took a fraction of the time Parasol's old onboarding process would have required.
+
+**What you accomplished:**
+
+* Self-serviced a fully configured RHEL 10 development workstation through Red Hat Developer Hub -- no tickets, no waiting
+* Explored the Red Hat build of Podman Desktop and its extension ecosystem
+* Installed the AI Lab extension and experimented with a local AI model
+* Instantiated a chatbot recipe and interacted with it locally
+
+**Key takeaways:**
+
+* Red Hat Developer Hub eliminates the developer onboarding bottleneck with self-service templates
+* Podman Desktop provides a powerful, extensible desktop container environment
+* The AI Lab extension gives developers a governed, local-first approach to AI experimentation -- eliminating the need for shadow AI services
+* Local models are useful for experimentation but have performance limitations
+
+**Next steps:**
+In Module 2, you'll customize the chatbot application, connect it to Parasol's approved Model as a Service endpoint for better performance, and prepare it for production deployment.
