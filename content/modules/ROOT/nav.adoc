@@ -1,9 +1,5 @@
 * xref:index.adoc[AI App Development from Desktop to Production]
 
-.Getting Started
-* xref:01-overview.adoc[Workshop overview]
-* xref:02-details.adoc[Workshop details]
-
 .Workshop Modules
 * xref:03-module-01-provisioning-and-exploration.adoc[Module 1: Provisioning and exploration]
 * xref:04-module-02-develop-and-build.adoc[Module 2: Develop and build]

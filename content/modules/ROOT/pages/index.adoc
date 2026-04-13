@@ -1,59 +1,47 @@
 = AI App Development from Desktop to Production
 
-Welcome to the AI App Development from Desktop to Production workshop!
+Many generative AI projects are abandoned after proof of concept -- costing organizations billions. This is often due to the challenges organizations face when moving concepts to production -- mismatched dependencies, untrusted packages, unvetted models, and more.
 
-Many generative AI projects are abandoned after proof of concept -- costing organizations billions. This is often due to a lack of foresight as well as the challenges organizations face when moving concepts to production -- mismatched dependencies, untrusted or malicious packages, unvetted Model Context Protocol (MCP) tools or large language models (LLMs), and more.
+In this workshop, you'll learn how Red Hat addresses these challenges by playing the role of a developer at **Parasol Insurance**.
 
-In this workshop, you will learn how Red Hat addresses these challenges with innovative new developer tools for local experimentation, and how platform engineers enforce policy and IT controls as those ideas move into production.
+== The scenario
 
-== What you'll learn
+At Parasol, onboarding a new developer takes weeks. Getting code from a developer's machine into production takes 3-5 days of manual handoffs. And shadow AI is a growing problem -- developers are using random third-party AI services that expose the company to security and compliance risks.
 
-In this workshop, you will:
+Your manager has told you: "We need to move fast on AI, but we can't keep doing it the way we have been. Prove there's a better way."
 
-* Scaffold new AI experimentation projects using Red Hat Developer Hub
-* Use Red Hat Desktop and the Red Hat build of Podman Desktop to experiment with AI apps on the desktop
-* Develop and customize AI-powered applications locally with container-native workflows
-* Move applications from desktop to production using OpenShift Pipelines and ArgoCD GitOps principles
+**Your mission**: Build and customize an AI-powered chatbot -- starting from your desktop and taking it all the way to production on OpenShift -- in a single session.
 
-== Who this is for
+== What you'll do
 
-This workshop is designed for developers and platform engineers who want to understand how Red Hat eliminates the "production gap" that causes so many AI projects to fail.
+* **Module 1: Provisioning and exploration** (~40 min) -- Self-service a developer workstation from Red Hat Developer Hub, explore Podman Desktop and the AI Lab extension, run an AI recipe locally
+* **Module 2: Develop and build** (~40 min) -- Clone and customize the Parasol Chat app, build and test locally, push to the OpenShift registry, deploy to the cluster, then push code to GitLab
+* **Module 3: Deploy and verify** (~40 min) -- Watch the automated CI/CD pipeline build your app, observe ArgoCD deploy it, verify it's running live
 
-**Experience level**: Intermediate
+== Your environment
 
-== Prerequisites
+Everything is pre-configured. Access all services through the tabs at the top of the right pane:
 
-Before starting this workshop, you should have:
+* **OCP Console** -- OpenShift cluster console
+* **Developer Hub** -- Red Hat Developer Hub
+* **GitLab** -- Source code repositories
+* **ArgoCD** -- GitOps deployment dashboard
+* **Terminal** -- Command-line access
 
-* Basic familiarity with containers and container images
-* Some experience with Git and version control
-* A general understanding of CI/CD concepts
+Your credentials for all services:
 
-No prior experience with OpenShift, Podman Desktop, or AI/ML is required.
+Username:
+[source,console,role=execute]
+----
+{user}
+----
 
-== Workshop environment
-
-Your lab environment has been pre-configured with everything you need:
-
-* An OpenShift cluster with Red Hat Developer Hub, OpenShift Pipelines, and OpenShift GitOps
-* A RHEL 10 virtual machine with Red Hat build of Podman Desktop (provisioned during the lab)
-* A Gitea repository for source code management
-* A Model as a Service (MaaS) endpoint served from OpenShift AI
-
-Access details:
-
-* OpenShift console: link:{openshift_console_url}[OpenShift Console^]
-* Username: `{user}`
-* Password: `{password}`
-
-NOTE: All environment details and credentials are available in the lab interface.
-
-== Estimated time
-
-This workshop will take approximately **2 hours** to complete.
-
-You can work at your own pace.
+Password:
+[source,console,role=execute]
+----
+{password}
+----
 
 == Let's get started!
 
-Click on **Workshop overview** in the navigation to begin your learning journey.
+Expand **Workshop Modules** in the left navigation and click on **Module 1: Provisioning and exploration** to begin.

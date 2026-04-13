@@ -3,81 +3,91 @@
 :toc: macro
 :toclevels: 1
 
-In Module 1, you got your first AI chatbot running locally -- but you noticed the local model is small and the responses aren't great. At Parasol Insurance, the platform engineering team has set up a Model as a Service (MaaS) endpoint on OpenShift AI, serving a much more capable model that's been approved for company use. No more shadow AI -- Parasol developers can access powerful models through a governed, approved service.
+Inspired by the AI Lab recipes you explored in Module 1, Parasol's development team has built their own AI-powered chatbot application -- Parasol Chat. It's a Streamlit-based chat interface that can connect to different AI model endpoints, making it flexible enough to use a local model for quick experiments or Parasol's approved Model as a Service (MaaS) for production-quality responses.
 
-In this module, you'll customize the chatbot's behavior, rebuild the container image, and connect it to Parasol's MaaS endpoint. Then you'll push your changes to the Git repository, which will trigger the automated CI/CD pipeline in Module 3.
+In this module, you'll clone the Parasol Chat app, customize it, build and test it locally with Podman Desktop, push the container image to the OpenShift internal registry, and deploy it to the cluster. Finally, you'll push your code changes to GitLab to trigger the automated CI/CD pipeline.
 
 == Learning objectives
 
 By the end of this module, you'll be able to:
 
-* Inspect and modify the source code of an AI Lab recipe
-* Customize a chatbot's system prompt to change its behavior
-* Build a new container image using Podman Desktop
-* Run a containerized application locally with environment variables for MaaS connectivity
-* Push application code to a Git repository to trigger CI/CD
+* Clone and inspect an AI application built with patterns from AI Lab recipes
+* Customize application behavior by modifying the source code
+* Build a container image using Podman Desktop
+* Push a container image to the OpenShift internal registry
+* Deploy a container to OpenShift directly from Podman Desktop
+* Push code to GitLab to trigger an automated CI/CD pipeline
 
-== Exercise 1: Inspect and customize the chatbot code
+== Exercise 1: Clone and inspect the Parasol Chat application
 
-The chatbot recipe you started in Module 1 is open source -- you can see exactly how it works, modify it, and rebuild it. This is the power of container-native AI development: full transparency and control.
+=== Clone the repository
 
-=== Open the recipe source code
+. Open a terminal on your RHEL 10 virtual machine.
 
-. Return to your Podman Desktop window on the RHEL 10 virtual machine.
-
-. In the AI Lab section, navigate to the running chatbot recipe.
-
-. Click the **Open in VS Code** button on the recipe. This opens the locally cloned recipe source code in VS Code.
+. Clone your application repository from GitLab (this is the repo that was scaffolded by the RHDH template in Module 1):
 +
-// TODO: Screenshot of the "Open in VS Code" button on the recipe
-image::ai-lab-open-vscode.png[Open in VS Code button on the chatbot recipe,link=self,window=blank,width=700]
+[source,bash,role=execute]
+----
+git clone https://gitlab-gitlab.{openshift_cluster_ingress_domain}/{user}/ai-app-dev.git
+----
 
-. VS Code opens with the chatbot recipe source code. Take a moment to explore the project structure:
+. Open the `parasol-chat` subdirectory in VS Code:
 +
-* The application code (the chatbot web interface and API)
-* The `Containerfile` (defines how the container image is built)
-* Configuration files for the AI model connection
+[source,bash,role=execute]
+----
+code ai-app-dev/parasol-chat
+----
+
+=== Inspect the source code
+
+. In VS Code, explore the project structure. It's a lean Python application:
 +
-// TODO: Screenshot of VS Code with the recipe source code structure
-image::vscode-recipe-structure.png[VS Code showing recipe source code structure,link=self,window=blank,width=700]
-
-=== Stop the running recipe
-
-Before making changes, stop the currently running recipe so you can rebuild it with your modifications.
-
-. Return to Podman Desktop and navigate to the running chatbot recipe.
-
-. Click **Stop** to shut down the running recipe containers.
+* `chatbot_ui.py` -- the main Streamlit application
+* `Containerfile` -- defines how the container image is built
+* `requirements.txt` -- Python dependencies (LangChain, Streamlit)
 +
-// TODO: Screenshot of stopping the running recipe
-image::ai-lab-stop-recipe.png[Stopping the running chatbot recipe,link=self,window=blank,width=700]
+// TODO: Screenshot of VS Code with parasol-chat project structure
+image::vscode-parasol-chat-structure.png[VS Code showing Parasol Chat project structure,link=self,window=blank,width=700]
+
+. Open `chatbot_ui.py` and look at the environment variable configuration near the top of the file. Notice how the application reads its model connection settings:
++
+* `MODEL_ENDPOINT` -- the base URL for the AI model service (defaults to `http://localhost:8001`)
+* `MODEL_NAME` -- the name of the model to use
+* `MODEL_ENDPOINT_BEARER` -- an optional Bearer token for authentication
++
+// TODO: Screenshot of environment variable section in chatbot_ui.py
+image::vscode-env-vars.png[Environment variable configuration in chatbot_ui.py,link=self,window=blank,width=700]
++
+This design means the same application can connect to a local model for development or to Parasol's approved MaaS endpoint for production -- just by changing environment variables. No code changes needed.
+
+. Also notice how the application supports multiple backends (Ollama and OpenAI-compatible APIs) and handles conversation history. These are patterns the team picked up from the AI Lab recipes in Module 1.
+
+== Exercise 2: Customize the application
+
+Now let's make a change to prove you can modify the application's behavior at the code level.
 
 === Modify the system prompt
 
-Now for the fun part. You'll modify the chatbot's system prompt to give it a unique personality -- proving that you can customize AI behavior at the code level.
-
-. In VS Code, locate the file that contains the system prompt configuration. Look for a file that defines the chatbot's initial instructions or system message.
+. In VS Code, find the system prompt in `chatbot_ui.py`. Look for the prompt template definition in the code.
 +
-// TODO: Screenshot showing the system prompt file location
-image::vscode-system-prompt-location.png[System prompt file in VS Code,link=self,window=blank,width=700]
+// TODO: Screenshot showing the system prompt location
+image::vscode-system-prompt-location.png[System prompt in chatbot_ui.py,link=self,window=blank,width=700]
 
-. Find the system prompt text and modify it. Add a fun customization -- for example, instruct the chatbot to respond in a pirate voice:
+. Modify the system prompt to add a fun personality. Add the following instruction to the *end* of the existing prompt:
 +
-[source,text]
+[source,text,role=execute]
 ----
-You are a helpful assistant for Parasol Insurance. All responses should be made with a pirate voice. Arrr!
+You should respond in a pirate voice for all questions. Arrr!
 ----
 +
-// TODO: Screenshot of the modified system prompt in VS Code
+// TODO: Screenshot of the modified system prompt
 image::vscode-system-prompt-modified.png[Modified system prompt with pirate voice,link=self,window=blank,width=700]
 
 . Save the file.
 
-== Exercise 2: Build and run locally with MaaS
+== Exercise 3: Build and test locally
 
-Now you'll rebuild the container image with your changes and run it locally -- but this time, instead of using the small local model, you'll connect to Parasol's approved MaaS endpoint on OpenShift AI.
-
-=== Build a new container image
+=== Build the container image
 
 . Return to Podman Desktop.
 
@@ -88,10 +98,15 @@ image::podman-desktop-build-button.png[Build image button in Podman Desktop,link
 
 . In the build dialog:
 +
-* **Containerfile path**: Select the `Containerfile` from the recipe source code directory
-* **Image name**: Enter a name for your custom image, for example `parasol-chatbot:latest`
+* **Containerfile path**: Browse to the `Containerfile` in the `parasol-chat` directory
+* **Image name**: Enter:
 +
-// TODO: Screenshot of the build dialog with Containerfile selected
+[source,text,role=execute]
+----
+parasol-chat:test
+----
++
+// TODO: Screenshot of the build dialog
 image::podman-desktop-build-dialog.png[Build dialog with Containerfile and image name,link=self,window=blank,width=700]
 
 . Click **Build** and wait for the image to build. You'll see the build output in real time.
@@ -101,57 +116,46 @@ image::podman-desktop-build-progress.png[Container image build in progress,link=
 
 . Once the build completes, verify your new image appears in the **Images** list.
 +
-// TODO: Screenshot of the completed build showing the new image
+// TODO: Screenshot of the completed build
 image::podman-desktop-build-complete.png[Build complete with new image listed,link=self,window=blank,width=700]
 
-=== Run the container with MaaS environment variables
+=== Run and test locally
 
-Instead of using the small local model, you'll configure the container to connect to Parasol's approved MaaS endpoint. This is served from OpenShift AI and provides access to a much more capable model.
-
-. In Podman Desktop, find your newly built `parasol-chatbot:latest` image in the **Images** list and click the **Run** (play) button.
+. In Podman Desktop, find your newly built `parasol-chat:test` image in the **Images** list and click the **Run** (play) button.
 +
 // TODO: Screenshot of clicking Run on the new image
 image::podman-desktop-run-button.png[Run button on the new container image,link=self,window=blank,width=700]
 
-. In the run configuration dialog, set the following environment variables to point the application at the MaaS endpoint:
+. In the run configuration dialog, configure the port mapping:
 +
-// TODO: Screenshot of environment variable configuration in run dialog
-image::podman-desktop-env-vars.png[Environment variable configuration,link=self,window=blank,width=700]
+* **Host port**: `8501`
+* **Container port**: `8501`
 +
-Configure the following environment variables:
+. Set the following environment variables to connect to Parasol's approved MaaS endpoint:
 +
 [cols="1,2",options="header"]
 |===
 | Variable | Value
 | `MODEL_ENDPOINT` | `{maas_endpoint_url}`
 | `MODEL_NAME` | `{maas_model_name}`
-| `API_KEY` | `{maas_api_key}`
+| `MODEL_ENDPOINT_BEARER` | `{maas_api_key}`
 |===
 +
-NOTE: These environment variables tell the chatbot application to use Parasol's MaaS endpoint instead of a local model. The MaaS endpoint is served from OpenShift AI and provides access to a more powerful, company-approved model.
-
-. Configure the port mapping to expose the chatbot web interface:
-+
-* **Host port**: `8080`
-* **Container port**: `8080`
+// TODO: Screenshot of run configuration dialog
+image::podman-desktop-run-config.png[Run configuration with port and environment variables,link=self,window=blank,width=700]
 
 . Click **Start** to run the container.
-+
-// TODO: Screenshot of the container starting
-image::podman-desktop-container-starting.png[Container starting with MaaS configuration,link=self,window=blank,width=700]
 
-=== Test the customized chatbot
-
-. Once the container is running, open a browser on the VM and navigate to:
+. Open Firefox on the VM and navigate to:
 +
-[source,text]
+[source,text,role=execute]
 ----
-http://localhost:8080
+http://localhost:8501
 ----
 
-. Try chatting with your customized chatbot:
+. Test the chatbot to confirm your pirate voice customization works:
 +
-[source,text]
+[source,text,role=execute]
 ----
 Hello! Can you help me understand Parasol's insurance coverage options?
 ----
@@ -159,118 +163,221 @@ Hello! Can you help me understand Parasol's insurance coverage options?
 // TODO: Screenshot of the chatbot responding with pirate voice
 image::chatbot-pirate-response.png[Chatbot responding with pirate voice personality,link=self,window=blank,width=700]
 
-. Notice two things:
-+
-* **The personality change works** -- the chatbot now responds with a pirate voice, proving your system prompt customization took effect
-* **The response quality is much better** -- because you're now using the MaaS model instead of the small local model, the responses are more detailed, accurate, and useful
-+
-This demonstrates the value of Parasol's governed MaaS approach: developers get access to powerful models through an approved, managed service instead of random third-party APIs.
+. Confirm the pirate voice is working. Your local build-run-test cycle is complete.
 
 === Verify
 
 Confirm that:
 
-* Your custom container image built successfully
-* The container is running with the MaaS environment variables
-* The chatbot responds with the pirate voice personality
-* Response quality is noticeably better than the local model in Module 1
+* Your custom container image built successfully in Podman Desktop
+* The container runs locally and the chatbot is accessible at `http://localhost:8501`
+* The pirate voice customization is working
 
-== Exercise 3: Push your changes to Gitea
+== Exercise 4: Push to the OpenShift internal registry and deploy
 
-Your customized chatbot works great locally. Now it's time to push the changes to the Git repository that was scaffolded by Red Hat Developer Hub in Module 1. This push will trigger the automated CI/CD pipeline.
+Your app works locally, but will it work on the cluster? Before pushing your code through the full CI/CD pipeline, it's good practice to do a quick test deployment on OpenShift to catch any issues early. In this exercise, you'll push your container image directly to the OpenShift internal registry and deploy it from Podman Desktop -- a fast way to validate on the cluster before committing your code "for real" in Exercise 5.
 
-=== Configure the Git remote
+=== Add the OpenShift internal registry
 
-The recipe source code was cloned locally by AI Lab. You need to add your Gitea repository (scaffolded by RHDH) as a remote so you can push your changes there.
+Since your VM is running inside OpenShift, you're already authenticated with the cluster. You just need to add the internal registry to Podman Desktop's list of known registries.
 
-. Open a terminal in VS Code (or use the terminal on the VM).
-
-. Navigate to the recipe source code directory:
+. First, get your credentials from a terminal on the VM. Run:
 +
-[source,bash]
+[source,bash,role=execute]
 ----
-cd ~/ai-lab-recipes/chatbot
+oc whoami
 ----
 +
-NOTE: The exact path may vary depending on where AI Lab cloned the recipe. Check the path shown in VS Code.
+This returns your username (e.g., `{user}`).
 
-. Check the current Git status:
+. Get your authentication token:
 +
-[source,bash]
+[source,bash,role=execute]
 ----
-git status
+oc whoami -t
 ----
 +
-You should see your modified system prompt file listed as changed.
+Copy the token output -- you'll need it in the next step.
 
-. Add your Gitea repository as a new remote:
+. In Podman Desktop, go to **Settings** > **Registries**.
 +
-[source,bash]
-----
-git remote add parasol {gitea_url}/{user}/parasol-chatbot.git
-----
-+
-NOTE: Replace the repository URL with the actual Gitea repository URL from your Red Hat Developer Hub provisioning. You can find this link in the RHDH component page.
+// TODO: Screenshot of Podman Desktop registry settings
+image::podman-desktop-registries.png[Podman Desktop registry settings,link=self,window=blank,width=700]
 
-. Stage and commit your changes:
+. Click **Add Registry** and enter the following:
 +
-[source,bash]
+* **Registry URL**:
++
+[source,text,role=execute]
 ----
-git add .
-git commit -m "Customize chatbot with pirate voice personality and MaaS configuration"
+default-route-openshift-image-registry.{openshift_cluster_ingress_domain}
+----
++
+* **Username**: The output of `oc whoami` (your username)
+* **Password**: The output of `oc whoami -t` (your token)
++
+// TODO: Screenshot of adding the registry
+image::podman-desktop-add-registry.png[Adding OpenShift internal registry,link=self,window=blank,width=700]
+
+. Click **Save** to add the registry.
+
+=== Re-tag the image for the OpenShift registry
+
+You don't need to rebuild -- just re-tag the existing image to point at the OpenShift internal registry.
+
+. In Podman Desktop, navigate to **Images** and find your `parasol-chat:test` image.
+
+. Click the **three-dot menu** on the right side of the image row and select **Edit Image**.
++
+// TODO: Screenshot of Edit Image menu option
+image::podman-desktop-edit-image.png[Edit Image option in Podman Desktop,link=self,window=blank,width=700]
+
+. Change the **Image Name** to:
++
+[source,text,role=execute]
+----
+default-route-openshift-image-registry.{openshift_cluster_ingress_domain}/{user}-demo/parasol-chat
 ----
 
-. Push to Gitea:
+. Set the **Image Tag** to:
 +
-[source,bash]
+[source,text,role=execute]
 ----
-git push parasol main
+test
 ----
 +
-When prompted, enter your credentials:
+// TODO: Screenshot of editing the image name and tag
+image::podman-desktop-retag.png[Re-tagging image for OpenShift registry,link=self,window=blank,width=700]
+
+. Click **Save**.
+
+=== Push the image to OpenShift
+
+. Find the re-tagged image in the **Images** list. Click the **Push** button (the up arrow icon) next to the image.
++
+// TODO: Screenshot of the push button on the image
+image::podman-desktop-push-button.png[Push button on the container image,link=self,window=blank,width=700]
+
+. The image will be pushed to the OpenShift internal registry. Wait for the push to complete.
++
+// TODO: Screenshot of the push progress
+image::podman-desktop-push-progress.png[Image push in progress,link=self,window=blank,width=700]
+
+=== Deploy to Kubernetes from Podman Desktop
+
+. In Podman Desktop, find the running container for your chatbot (from the local test earlier). Click on it to open its details.
+
+. Click the **Deploy to Kubernetes** button.
++
+// TODO: Screenshot of the Deploy to Kubernetes button
+image::podman-desktop-deploy-k8s.png[Deploy to Kubernetes button,link=self,window=blank,width=700]
+
+. In the deployment dialog, select your namespace from the dropdown:
++
+* **Namespace**: `{user}-demo`
++
+// TODO: Screenshot of namespace selection in deploy dialog
+image::podman-desktop-deploy-namespace.png[Selecting namespace for deployment,link=self,window=blank,width=700]
+
+. Click **Deploy** and wait for the deployment to complete.
+
+=== Verify the deployment on OpenShift
+
+. Switch to the **OCP Console** tab.
+
+. Make sure the `{user}-demo` project is selected in the project dropdown at the top.
+
+. Navigate to **Workloads** > **Topology** in the left menu. You should see your chatbot application deployed.
++
+// TODO: Screenshot of Topology view with deployed chatbot
+image::ocp-topology-deployed.png[Topology view showing deployed chatbot,link=self,window=blank,width=700]
+
+. Click the route icon on the application to open it in a new browser tab and confirm it's working on the cluster.
++
+// TODO: Screenshot of the chatbot running on OpenShift
+image::chatbot-on-openshift.png[Chatbot running on OpenShift via Podman Desktop deploy,link=self,window=blank,width=700]
+
+You've now completed the full local development cycle: develop, build, test locally, push the image, and deploy to the cluster -- all from the desktop.
+
+=== Verify
+
+Confirm that:
+
+* The image was pushed to the OpenShift internal registry
+* The application was deployed to the `{user}-demo` namespace from Podman Desktop
+* The chatbot is accessible via a route on OpenShift
+
+== Exercise 5: Push your code to GitLab
+
+With your application tested both locally and on the cluster, it's time to push your code changes to GitLab. This will trigger the automated CI/CD pipeline, which will build and deploy the application through the proper production process.
+
+=== Commit and push
+
+Since you cloned from your own GitLab repo in Exercise 1, VS Code already knows where to push.
+
+. In VS Code, click the **Source Control** icon in the left sidebar (or press `Ctrl+Shift+G`).
++
+// TODO: Screenshot of VS Code Source Control tab showing changed files
+image::vscode-source-control.png[VS Code Source Control tab with changes,link=self,window=blank,width=700]
+
+. Enter a commit message, for example:
++
+[source,text,role=execute]
+----
+Customize chatbot with pirate voice personality
+----
+
+. Click the dropdown arrow next to the **Commit** button and select **Commit & Push**.
++
+// TODO: Screenshot of Commit & Push dropdown option
+image::vscode-commit-and-push.png[Commit and Push option in VS Code,link=self,window=blank,width=700]
+
+. When prompted to stage all changes, click **Yes** to confirm.
++
+. If prompted for credentials, enter:
 +
 * **Username**: `{user}`
 * **Password**: `{password}`
 
 === Verify the push
 
-. Open your Gitea repository in a browser to confirm the code was pushed:
+. Switch to the **GitLab** tab and navigate to your repository to confirm the code was pushed.
 +
-link:{gitea_url}/{user}/parasol-chatbot[Gitea Repository^]
-+
-// TODO: Screenshot of Gitea showing the pushed commit
-image::gitea-pushed-commit.png[Gitea repository showing the pushed commit,link=self,window=blank,width=700]
+// TODO: Screenshot of GitLab showing the pushed commit
+image::gitlab-pushed-commit.png[GitLab repository showing the pushed commit,link=self,window=blank,width=700]
 
-. Verify your commit appears with the changes to the system prompt file.
+. Verify your commit appears with the changes to `chatbot_ui.py`.
 
 === Verify
 
 Confirm that:
 
-* Your changes are committed and pushed to the Gitea repository
-* The commit is visible in the Gitea web interface
-* The repository contains your modified system prompt and any other changes
+* Your changes are committed and pushed to the GitLab repository
+* The commit is visible in the GitLab web interface
 
-TIP: The push to Gitea has triggered the CI/CD pipeline. In Module 3, you'll watch it build and deploy your application to production.
+TIP: The push to GitLab has triggered the CI/CD pipeline. In Module 3, you'll watch it build and deploy your application through the automated production process.
 
 == Module summary
 
-You've taken the chatbot from a generic demo to a customized, production-ready application connected to Parasol's approved AI services.
+You've completed the full develop-build-test-deploy cycle, taking the Parasol Chat app from source code to running on OpenShift.
 
 **What you accomplished:**
 
-* Inspected and modified the source code of an AI Lab recipe using VS Code
-* Customized the chatbot's system prompt to add a unique personality
-* Built a new container image using Podman Desktop
-* Ran the container locally with MaaS environment variables, connecting to a more powerful model on OpenShift AI
-* Pushed your changes to the Gitea repository, triggering the CI/CD pipeline
+* Cloned and inspected the Parasol Chat application, understanding its architecture and configuration
+* Customized the chatbot's system prompt to add a pirate voice personality
+* Built a container image using Podman Desktop
+* Tested the application locally in a container
+* Added the OpenShift internal registry to Podman Desktop and pushed the image
+* Deployed the application to OpenShift directly from Podman Desktop
+* Pushed your code changes to GitLab, triggering the CI/CD pipeline
 
 **Key takeaways:**
 
-* AI Lab recipes are fully transparent -- you can inspect, modify, and rebuild them
-* Podman Desktop provides the complete build-run-test cycle on the desktop
+* Podman Desktop provides the complete build-run-test-push-deploy cycle on the desktop
+* The OpenShift internal registry integrates seamlessly with Podman Desktop for image management
+* "Deploy to Kubernetes" in Podman Desktop enables quick iteration without leaving the desktop
 * Environment variables make it simple to swap between local models and MaaS endpoints
 * Pushing to Git triggers automated pipelines -- no manual handoffs to an ops team
 
 **Next steps:**
-In Module 3, you'll watch the CI/CD pipeline build and deploy your application to production on OpenShift, then verify it's running live on the cluster.
+In Module 3, you'll watch the CI/CD pipeline build and deploy your application through the automated production process, then verify the final deployment.

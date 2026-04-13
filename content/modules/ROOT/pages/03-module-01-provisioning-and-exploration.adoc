@@ -5,7 +5,7 @@
 
 It's your first day working on AI initiatives at Parasol Insurance. Normally, getting a new developer productive takes weeks -- setting up environments, requesting access, installing tools, and navigating endless documentation. But Parasol has adopted Red Hat Developer Hub to eliminate that friction.
 
-In this module, you'll self-service a fully configured development workstation, explore the Red Hat build of Podman Desktop and its extensions, and get your first AI chatbot up and running locally -- all in about 40 minutes.
+In this module, you'll self-service a fully configured development workstation, explore the link:https://developers.redhat.com/products/red-hat-build-podman-desktop[Red Hat build of Podman Desktop^] and its extensions, and get hands-on with the AI Lab to see how developers can safely experiment with AI models and recipes on the desktop.
 
 == Learning objectives
 
@@ -13,8 +13,8 @@ By the end of this module, you'll be able to:
 
 * Use Red Hat Developer Hub to self-service a RHEL 10 virtual machine with pre-installed developer tools
 * Navigate the Red Hat build of Podman Desktop and explore its extensions
-* Install and use the AI Lab extension to work with AI models locally
-* Instantiate an AI chatbot recipe and interact with a local model
+* Install and use the AI Lab extension to experiment with AI models and recipes
+* Understand how the AI Lab recipe catalog provides inspiration for building AI-powered applications
 
 == Exercise 1: Provision your development environment with Red Hat Developer Hub
 
@@ -24,11 +24,7 @@ You'll use Red Hat Developer Hub to provision a RHEL 10 virtual machine that com
 
 === Access Red Hat Developer Hub
 
-. Open Red Hat Developer Hub in your browser:
-+
-link:{rhdh_url}[Red Hat Developer Hub^]
-+
-NOTE: If you don't see this link in your environment, you can access Red Hat Developer Hub from the OpenShift console at link:{openshift_console_url}[{openshift_console_url}^] by navigating to the Developer Hub link in the application menu.
+. Click the **Developer Hub** tab at the top of the right pane.
 
 . Log in using your credentials:
 +
@@ -45,18 +41,20 @@ image::rhdh-home.png[Red Hat Developer Hub home page,link=self,window=blank,widt
 
 === Create your AI developer workstation
 
-. Click on **Create...** in the left navigation menu, then select the **AI Developer Workstation** template from the catalog.
+. Click the **(+)** button at the top right of the page, then select the **AI App Dev - Parasol Chat** template from the catalog.
 +
-// TODO: Screenshot of template catalog with AI Developer Workstation highlighted
-image::rhdh-template-catalog.png[Template catalog showing AI Developer Workstation,link=self,window=blank,width=700]
+// TODO: Screenshot of template catalog with AI App Dev - Parasol Chat highlighted
+image::rhdh-template-catalog.png[Template catalog showing AI App Dev - Parasol Chat,link=self,window=blank,width=700]
 
 . Fill in the template form with the following values:
 +
-* **Name**: Leave as the default or enter a name for your workstation
-* Accept the remaining defaults
+* **Application Name**: Leave as the default (`ai-app-dev`)
+* **Virtual Machine Name**: Leave as the default (`developer-workstation`) or enter a custom name
++
+NOTE: The virtual machine name must contain only lowercase letters, numbers, and hyphens, and must start and end with an alphanumeric character.
 +
 // TODO: Screenshot of the template form being filled in
-image::rhdh-template-form.png[AI Developer Workstation template form,link=self,window=blank,width=700]
+image::rhdh-template-form.png[AI App Dev template form,link=self,window=blank,width=700]
 
 . Click **Next** to review your selections, then click **Create** to begin provisioning.
 +
@@ -67,12 +65,14 @@ image::rhdh-provisioning.png[Provisioning in progress,link=self,window=blank,wid
 +
 * Provisioning a RHEL 10 virtual machine via OpenShift Virtualization (KubeVirt)
 * Installing the Red Hat build of Podman Desktop
-* Scaffolding a Git repository in Gitea for your application code
+* Scaffolding a Git repository in GitLab for your application code
 * Configuring CI/CD pipelines for your project
 +
 TIP: This process takes a few minutes. In a traditional setup, this would take days or weeks of manual work across multiple teams.
 
 . Once provisioning is complete, you'll see a success page with links to your new resources.
++
+NOTE: The virtual machine may take a minute or two to fully start up after provisioning completes. You can continue exploring the success page and Developer Hub while it boots.
 +
 // TODO: Screenshot of the completed provisioning page with resource links
 image::rhdh-provisioning-complete.png[Provisioning complete with resource links,link=self,window=blank,width=700]
@@ -82,10 +82,10 @@ image::rhdh-provisioning-complete.png[Provisioning complete with resource links,
 . From the success page, note the links to:
 +
 * Your **RHEL 10 virtual machine** console
-* Your **Gitea repository** (the scaffolded source code)
+* Your **GitLab repository** (the scaffolded source code)
 * Your **component** in Red Hat Developer Hub
 +
-. Click on the link to your component in Red Hat Developer Hub to view its details page. This is where you'll later see CI/CD activity.
+. Click on the link to your component in Red Hat Developer Hub to view its details page.
 +
 // TODO: Screenshot of the component overview page in RHDH
 image::rhdh-component-overview.png[Component overview in Red Hat Developer Hub,link=self,window=blank,width=700]
@@ -95,10 +95,8 @@ image::rhdh-component-overview.png[Component overview in Red Hat Developer Hub,l
 You should now have:
 
 * A RHEL 10 virtual machine running on the cluster
-* A Gitea repository with scaffolded application code
+* A GitLab repository with scaffolded application code
 * A component registered in Red Hat Developer Hub
-
-NOTE: Keep the Red Hat Developer Hub tab open -- you'll return to it in Module 3.
 
 == Exercise 2: Explore the Red Hat build of Podman Desktop
 
@@ -106,9 +104,14 @@ Now that your workstation is provisioned, let's explore the Red Hat build of Pod
 
 === Connect to your virtual machine
 
-. Open a VNC session to your RHEL 10 virtual machine. You can access it from the link provided in the provisioning success page, or through the OpenShift console:
+NOTE: The virtual machine in this workshop simulates a real developer desktop. All the tools you'll use here -- including Podman Desktop, VS Code, and the AI Lab extension -- can be installed directly on your own laptop. Podman Desktop is available for Linux, Windows, and Mac. We're using a VM in this workshop so you don't need to install anything locally.
+
+. In the Developer Hub component page, click the **VNC Console** link to open a VNC session to your virtual machine.
 +
-link:{openshift_console_url}/k8s/ns/{user}-devspaces/kubevirt.io~v1~VirtualMachine[OpenShift Console - Virtual Machines^]
+// TODO: Screenshot of VNC Console link in Developer Hub
+image::rhdh-vnc-link.png[VNC Console link in Developer Hub component page,link=self,window=blank,width=700]
+
+. The VNC console opens, showing your RHEL 10 desktop.
 +
 // TODO: Screenshot of VNC console connection
 image::vnc-console.png[VNC console connection to RHEL 10 VM,link=self,window=blank,width=700]
@@ -152,9 +155,9 @@ image::podman-desktop-extensions.png[Podman Desktop extensions page,link=self,wi
 +
 TIP: Extensions are how Podman Desktop stays lightweight while still supporting specialized workflows like AI development.
 
-== Exercise 3: Install the AI Lab extension and run a chatbot recipe
+== Exercise 3: Install the AI Lab extension and explore recipes
 
-At Parasol, developers need a safe, local way to experiment with AI -- no more shadow AI using random third-party services. The AI Lab extension for Podman Desktop provides exactly this: a governed, local-first approach to AI experimentation.
+At Parasol, developers need a safe, local way to experiment with AI -- no more shadow AI using random third-party services. The AI Lab extension for Podman Desktop provides exactly this: a governed, local-first approach to AI experimentation with a catalog of pre-built recipes to take inspiration from.
 
 === Install the AI Lab extension
 
@@ -175,43 +178,30 @@ image::ai-lab-nav.png[AI Lab icon in Podman Desktop navigation,link=self,window=
 
 === Explore the AI Lab
 
-. Click on the **AI Lab** icon to open it. Take a moment to explore:
+. Click on the **AI Lab** icon to open it. Take a moment to explore the different sections:
 +
-* **Catalog**: Pre-built AI recipes and models
-* **Models**: Available AI models you can run locally
-* **Playground**: A place to experiment with models interactively
+* **Catalog**: Pre-built AI recipes covering chatbots, code generation, summarization, and more
+* **Models**: Available AI models you can download and run locally
+* **Playground**: An interactive space to experiment with models directly
 +
 // TODO: Screenshot of AI Lab main page
 image::ai-lab-main.png[AI Lab main page,link=self,window=blank,width=700]
 
-=== Try the AI playground
-
-. Navigate to the **Playground** section in AI Lab.
-
-. Select a small model from the available list. Since you're running locally, choose one of the smaller models to keep things responsive.
+. Browse through the **Models** section. Notice the variety of models available -- different sizes, capabilities, and use cases. Developers can experiment with many different models to find what works best for their needs.
 +
-// TODO: Screenshot of model selection in playground
-image::ai-lab-playground-model.png[Selecting a model in the AI playground,link=self,window=blank,width=700]
+// TODO: Screenshot of models list
+image::ai-lab-models.png[Available models in AI Lab,link=self,window=blank,width=700]
 
-. Once the model loads, try chatting with it. Type a simple question like:
-+
-[source,text]
-----
-What is Parasol Insurance and what services do they provide?
-----
-+
-// TODO: Screenshot of a chat exchange in the playground
-image::ai-lab-playground-chat.png[Chatting with a model in the AI playground,link=self,window=blank,width=700]
+=== Run a recipe from the catalog
 
-. Notice the response quality and speed. The local model works, but it's quite small -- the responses may be generic or slow. That's expected. You'll address this limitation in Module 2.
-+
-TIP: The AI playground is useful for quick experimentation. For building actual applications, you'll use the recipe catalog.
-
-=== Instantiate the chatbot recipe
+The recipe catalog is where the magic happens. Each recipe is a fully working AI application that you can run locally, inspect, and take inspiration from for your own projects.
 
 . Navigate to the **Catalog** section in AI Lab.
++
+// TODO: Screenshot of the recipe catalog
+image::ai-lab-catalog.png[AI Lab recipe catalog,link=self,window=blank,width=700]
 
-. Find the **Chatbot** recipe in the catalog. This is a pre-built application template that provides a web-based chat interface backed by an AI model.
+. Find the **Chatbot** recipe in the catalog. This is a pre-built application that provides a web-based chat interface backed by an AI model.
 +
 // TODO: Screenshot of the chatbot recipe in the catalog
 image::ai-lab-catalog-chatbot.png[Chatbot recipe in the AI Lab catalog,link=self,window=blank,width=700]
@@ -233,25 +223,47 @@ image::ai-lab-chatbot-running.png[Chatbot application running locally,link=self,
 
 . Try asking the chatbot a few questions:
 +
-[source,text]
+[source,text,role=execute]
 ----
-Hello! Can you help me with an insurance claim?
+What are the benefits of using containers for application development?
 ----
 +
-[source,text]
+[source,text,role=execute]
 ----
-What types of coverage does Parasol Insurance offer?
+Can you explain what a large language model is in simple terms?
 ----
 
-. Notice that the chatbot responds, but the answers are generic -- it doesn't know anything specific about Parasol Insurance, and the local model is quite small with limited performance. In the next module, you'll customize this application and connect it to a more powerful model.
+. Take a moment to appreciate what just happened: you downloaded an AI model, spun up a fully working chatbot application, and tested it -- all locally, without any cloud API keys or third-party services. This is the kind of safe experimentation that the AI Lab enables.
+
+=== Inspect the recipe source code
+
+The recipes in AI Lab aren't black boxes. You can inspect their source code, understand how they work, and take inspiration for building your own AI applications.
+
+. Return to Podman Desktop and navigate to the running chatbot recipe in AI Lab.
+
+. Click the **Open in VS Code** button on the recipe. This opens the locally cloned recipe source code in VS Code.
++
+// TODO: Screenshot of the "Open in VS Code" button on the recipe
+image::ai-lab-open-vscode.png[Open in VS Code button on the chatbot recipe,link=self,window=blank,width=700]
+
+. In VS Code, explore the project structure. Notice how the application is put together:
++
+* How it connects to the AI model endpoint
+* How the chat interface handles conversation history
+* How environment variables are used to configure the model connection
++
+// TODO: Screenshot of VS Code with the recipe source code structure
+image::vscode-recipe-structure.png[VS Code showing recipe source code structure,link=self,window=blank,width=700]
+
+. This is exactly the kind of inspiration that Parasol's developers have been using. By exploring these recipes, the team has been learning patterns for building AI-powered applications -- and they've used those patterns to build something of their own, which you'll work with in the next module.
 
 === Verify
 
 Confirm that:
 
 * The AI Lab extension is installed in Podman Desktop
-* The chatbot recipe is running locally
-* You can interact with the chatbot through the web interface
+* You ran a recipe from the catalog and interacted with it
+* You opened the recipe source code in VS Code and explored the project structure
 
 == Module summary
 
@@ -261,15 +273,15 @@ You've successfully completed the provisioning and exploration module -- and it 
 
 * Self-serviced a fully configured RHEL 10 development workstation through Red Hat Developer Hub -- no tickets, no waiting
 * Explored the Red Hat build of Podman Desktop and its extension ecosystem
-* Installed the AI Lab extension and experimented with a local AI model
-* Instantiated a chatbot recipe and interacted with it locally
+* Installed the AI Lab extension and explored different models and recipes
+* Ran a chatbot recipe locally and inspected its source code in VS Code
 
 **Key takeaways:**
 
 * Red Hat Developer Hub eliminates the developer onboarding bottleneck with self-service templates
 * Podman Desktop provides a powerful, extensible desktop container environment
 * The AI Lab extension gives developers a governed, local-first approach to AI experimentation -- eliminating the need for shadow AI services
-* Local models are useful for experimentation but have performance limitations
+* The recipe catalog provides inspiration and working patterns that teams can use to build their own AI-powered applications
 
 **Next steps:**
-In Module 2, you'll customize the chatbot application, connect it to Parasol's approved Model as a Service endpoint for better performance, and prepare it for production deployment.
+In Module 2, you'll work with an application that Parasol's team built after taking inspiration from these recipes -- the Parasol Chat app. You'll customize it, build and test it locally, push it to the OpenShift registry, and deploy it to the cluster.
