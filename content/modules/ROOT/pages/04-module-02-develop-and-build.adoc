@@ -343,7 +343,6 @@ image::vscode-commit-and-push.png[Commit and Push option in VS Code,link=self,wi
 
 . Switch to the **GitLab** tab and navigate to your repository to confirm the code was pushed.
 +
-// TODO: Screenshot of GitLab showing the pushed commit
 image::gitlab-pushed-commit.png[GitLab repository showing the pushed commit,link=self,window=blank,width=700]
 
 . Verify your commit appears with the changes to `chatbot_ui.py`.

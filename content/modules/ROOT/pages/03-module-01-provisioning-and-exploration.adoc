@@ -31,19 +31,16 @@ You'll use Red Hat Developer Hub to provision a RHEL 10 virtual machine that com
 * **Username**: `{user}`
 * **Password**: `{password}`
 +
-// TODO: Screenshot of RHDH login page
 image::rhdh-login.png[Red Hat Developer Hub login page,link=self,window=blank,width=700]
 
 . After logging in, you'll land on the Red Hat Developer Hub home page. Take a moment to look around -- this is the central hub where Parasol's developers discover and provision everything they need.
 +
-// TODO: Screenshot of RHDH home page
 image::rhdh-home.png[Red Hat Developer Hub home page,link=self,window=blank,width=700]
 
 === Create your AI developer workstation
 
 . Click the **(+)** button at the top right of the page, then select the **AI App Dev - Parasol Chat** template from the catalog.
 +
-// TODO: Screenshot of template catalog with AI App Dev - Parasol Chat highlighted
 image::rhdh-template-catalog.png[Template catalog showing AI App Dev - Parasol Chat,link=self,window=blank,width=700]
 
 . Fill in the template form with the following values:
@@ -53,12 +50,10 @@ image::rhdh-template-catalog.png[Template catalog showing AI App Dev - Parasol C
 +
 NOTE: The virtual machine name must contain only lowercase letters, numbers, and hyphens, and must start and end with an alphanumeric character.
 +
-// TODO: Screenshot of the template form being filled in
 image::rhdh-template-form.png[AI App Dev template form,link=self,window=blank,width=700]
 
 . Click **Review** to review your selections, then click **Create** to begin provisioning.
 +
-// TODO: Screenshot of the provisioning progress
 image::rhdh-provisioning.png[Provisioning in progress,link=self,window=blank,width=700]
 
 . Wait for the provisioning to complete. Red Hat Developer Hub is doing several things behind the scenes:
@@ -74,7 +69,6 @@ TIP: This process takes a few minutes. In a traditional setup, this would take d
 +
 NOTE: The virtual machine may take a minute or two to fully start up after provisioning completes. You can continue exploring the success page and Developer Hub while it boots.
 +
-// TODO: Screenshot of the completed provisioning page with resource links
 image::rhdh-provisioning-complete.png[Provisioning complete with resource links,link=self,window=blank,width=700]
 
 === Verify your provisioned resources
@@ -86,7 +80,6 @@ image::rhdh-provisioning-complete.png[Provisioning complete with resource links,
 +
 . Click on **Open in Catalog** to view its details page.
 +
-// TODO: Screenshot of the component overview page in RHDH
 image::rhdh-component-overview.png[Component overview in Red Hat Developer Hub,link=self,window=blank,width=700]
 
 . Note the new links provided on the component page:
@@ -112,7 +105,6 @@ NOTE: The virtual machine in this workshop simulates a real developer desktop. A
 
 . In the Developer Hub component page, click the **VNC Console** link to open a VNC session to your virtual machine.
 +
-// TODO: Screenshot of VNC Console link in Developer Hub
 image::rhdh-vnc-link.png[VNC Console link in Developer Hub component page,link=self,window=blank,width=700]
 
 . The VNC console opens, showing your RHEL 10 desktop.

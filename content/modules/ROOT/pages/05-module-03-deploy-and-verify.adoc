@@ -33,17 +33,10 @@ The moment you pushed your code to GitLab in Module 2, a webhook triggered an Op
 
 . Navigate to **Pipelines** > **Pipelines** in the left menu. You should see your pipeline listed, and next to it the most recent PipelineRun which should be running (it takes about 4 minutes to complete).
 +
-// TODO: Screenshot of Pipelines section in OCP console
 image::ocp-pipelines-list.png[Pipelines list in OpenShift console,link=self,window=blank,width=700]
 
-. You should see your `ai-app-dev-build` pipeline. Click on it to see its details and recent runs.
+. Click on the most recent **PipelineRun** under the **Last Run** heading to see the individual tasks and their status.
 +
-// TODO: Screenshot of pipeline details showing runs
-image::ocp-pipeline-details.png[Pipeline details with recent runs,link=self,window=blank,width=700]
-
-. Click on the most recent **PipelineRun** to see the individual tasks and their status.
-+
-// TODO: Screenshot of PipelineRun details showing task graph
 image::ocp-pipelinerun-details.png[PipelineRun details with task graph,link=self,window=blank,width=700]
 
 === Understand the pipeline stages
@@ -54,14 +47,12 @@ The pipeline performs three tasks automatically:
 . **build-image** -- Uses Buildah with the `Containerfile` to build your container image and push it to the cluster's internal container registry
 . **restart-rollout** -- Triggers a rollout restart of the Deployment to pick up the new image
 +
-// TODO: Screenshot of pipeline tasks completing
 image::ocp-pipeline-tasks.png[Pipeline tasks completing successfully,link=self,window=blank,width=700]
 
 . Wait for the pipeline to complete. All tasks should show a green checkmark.
 +
 You can click on each task to see its logs. The **build-image** task logs will look familiar -- it's running the same `Containerfile` you built locally in Module 2 with Podman Desktop.
 +
-// TODO: Screenshot of build-image task logs
 image::ocp-pipeline-build-logs.png[Build task logs showing Containerfile build,link=self,window=blank,width=700]
 +
 TIP: This automated pipeline replaces the 3-5 day manual handoff process at Parasol. The same Containerfile used locally builds the production image -- eliminating the "works on my machine" problem.
@@ -87,11 +78,12 @@ With the container image built and pushed, ArgoCD takes over. OpenShift GitOps (
 * **Username**: `{user}`
 * **Password**: `{password}`
 +
+image::argocd-login.png[ArgoCD login page,link=self,window=blank,width=700]
++
 On the *Authorize Access* screen, click *Allow Selected Permissions* to grant ArgoCD access to your identity information.
 
 . Once logged in, you should see the `ai-app-dev` application. Click on it to see its details.
 +
-// TODO: Screenshot of ArgoCD dashboard showing ai-app-dev application
 image::argocd-app-overview.png[ArgoCD dashboard showing ai-app-dev application,link=self,window=blank,width=700]
 
 . The application will show one of the following states:
@@ -100,7 +92,6 @@ image::argocd-app-overview.png[ArgoCD dashboard showing ai-app-dev application,l
 * **Synced** -- The deployment is complete and matches the desired state
 * **Healthy** -- The application is running and passing health checks
 +
-// TODO: Screenshot of ArgoCD application in synced/healthy state
 image::argocd-app-synced.png[ArgoCD application showing synced and healthy status,link=self,window=blank,width=700]
 
 . Explore the application details in ArgoCD. You can see all the Kubernetes resources that were deployed:
@@ -111,7 +102,6 @@ image::argocd-app-synced.png[ArgoCD application showing synced and healthy statu
 * The Pipeline and PipelineRun resources
 * Many other resources that were created as a result of the above resources being created (for example, the Deployment creates ReplicaSets, which create Pods -- all of which are visible in ArgoCD)
 +
-// TODO: Screenshot of ArgoCD resource tree
 image::argocd-resource-tree.png[ArgoCD resource tree showing deployed resources,link=self,window=blank,width=700]
 
 === Verify
@@ -132,7 +122,6 @@ Your AI chatbot has been deployed through the production CI/CD pipeline. Let's v
 
 . Click on the **Topology** tab. You should see your chatbot application deployed and running.
 +
-// TODO: Screenshot of RHDH Topology view showing the deployed chatbot and VM
 image::rhdh-topology-chatbot.png[RHDH Topology view showing deployed chatbot application,link=self,window=blank,width=700]
 
 . Click on the application (the blue circle) in the Topology view to see its details. Click on the **Resources** tab to see:
@@ -140,14 +129,12 @@ image::rhdh-topology-chatbot.png[RHDH Topology view showing deployed chatbot app
 * **Pods** -- your chatbot container running as a pod
 * **Routes** -- the public URL to access the application (also accessible via the small arrow icon at the upper right of the blue circle):
 +
-// TODO: Screenshot of application details in RHDH Topology view
 image::rhdh-topology-details.png[Application details showing pods and routes,link=self,window=blank,width=700]
 
 === Access the live chatbot
 
 . Click the route URL in the Topology details to open your chatbot in a new browser tab.
 +
-// TODO: Screenshot of the live chatbot running on OpenShift
 image::chatbot-live-on-openshift.png[Chatbot application running live on OpenShift,link=self,window=blank,width=700]
 
 . Test the live chatbot with a few messages:
@@ -162,7 +149,6 @@ Hello! Can you tell me about Parasol Insurance's claims process?
 What makes Parasol Insurance different from other providers?
 ----
 +
-// TODO: Screenshot of the chatbot responding in production with pirate voice
 image::chatbot-production-pirate.png[Live chatbot responding with pirate voice personality,link=self,window=blank,width=700]
 
 . Verify that:
