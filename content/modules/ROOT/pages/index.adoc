@@ -31,13 +31,13 @@ Everything is pre-configured. Access all services through the tabs at the top of
 Your credentials for all services:
 
 Username:
-[source,console,role=execute]
+[source,console,role=execute,subs="attributes+"]
 ----
 {user}
 ----
 
 Password:
-[source,console,role=execute]
+[source,console,role=execute,subs="attributes+"]
 ----
 {password}
 ----

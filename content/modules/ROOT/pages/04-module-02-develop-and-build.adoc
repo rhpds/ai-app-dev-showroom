@@ -26,7 +26,7 @@ By the end of this module, you'll be able to:
 
 . Clone your application repository from GitLab (this is the repo that was scaffolded by the RHDH template in Module 1):
 +
-[source,bash,role=execute]
+[source,bash,role=execute,subs="attributes+"]
 ----
 git clone https://gitlab-gitlab.{openshift_cluster_ingress_domain}/{user}/ai-app-dev.git
 ----
@@ -208,7 +208,7 @@ image::podman-desktop-registries.png[Podman Desktop registry settings,link=self,
 +
 * **Registry URL**:
 +
-[source,text,role=execute]
+[source,text,role=execute,subs="attributes+"]
 ----
 default-route-openshift-image-registry.{openshift_cluster_ingress_domain}
 ----
@@ -234,7 +234,7 @@ image::podman-desktop-edit-image.png[Edit Image option in Podman Desktop,link=se
 
 . Change the **Image Name** to:
 +
-[source,text,role=execute]
+[source,text,role=execute,subs="attributes+"]
 ----
 default-route-openshift-image-registry.{openshift_cluster_ingress_domain}/{user}-demo/parasol-chat
 ----
