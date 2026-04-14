@@ -3,3 +3,7 @@ title: Showroom Collection
 version: ~
 nav:
   - modules/ROOT/nav.adoc
+asciidoc:
+  attributes:
+    experimental: true
+    page-pagination: true

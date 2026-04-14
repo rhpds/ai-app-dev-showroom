@@ -44,4 +44,4 @@ Password:
 
 == Let's get started!
 
-Expand **Workshop Modules** in the left navigation and click on **Module 1: Provisioning and exploration** to begin.
+Click the _Next_ link below to get started with **Module 1: Provisioning and exploration**.
