@@ -26,7 +26,7 @@ You'll use Red Hat Developer Hub to provision a RHEL 10 virtual machine that com
 
 . Click the **Developer Hub** tab at the top of the right pane.
 
-. Log in using your credentials:
+. Click Sign in, and log in using your credentials:
 +
 * **Username**: `{user}`
 * **Password**: `{password}`
@@ -56,7 +56,7 @@ NOTE: The virtual machine name must contain only lowercase letters, numbers, and
 // TODO: Screenshot of the template form being filled in
 image::rhdh-template-form.png[AI App Dev template form,link=self,window=blank,width=700]
 
-. Click **Next** to review your selections, then click **Create** to begin provisioning.
+. Click **Review** to review your selections, then click **Create** to begin provisioning.
 +
 // TODO: Screenshot of the provisioning progress
 image::rhdh-provisioning.png[Provisioning in progress,link=self,window=blank,width=700]
@@ -81,14 +81,18 @@ image::rhdh-provisioning-complete.png[Provisioning complete with resource links,
 
 . From the success page, note the links to:
 +
-* Your **RHEL 10 virtual machine** console
-* Your **GitLab repository** (the scaffolded source code)
-* Your **component** in Red Hat Developer Hub
+* The **GitLab Repository** where your scaffolded application code lives (we'll visit this in a bit)
+* A link to **Open in Catalog**. The catalog is where all your provisioned resources are registered in Developer Hub.
 +
-. Click on the link to your component in Red Hat Developer Hub to view its details page.
+. Click on **Open in Catalog** to view its details page.
 +
 // TODO: Screenshot of the component overview page in RHDH
 image::rhdh-component-overview.png[Component overview in Red Hat Developer Hub,link=self,window=blank,width=700]
+
+. Note the new links provided on the component page:
++
+* **Virtual Machine**: A link into the OCP console to view details about your provisioned VM, including its status, resources, and connection info
+* **VNC Console**: Connect to your new virtual machine's desktop environment directly from Developer Hub
 
 === Verify
 
@@ -100,7 +104,7 @@ You should now have:
 
 == Exercise 2: Explore the Red Hat build of Podman Desktop
 
-Now that your workstation is provisioned, let's explore the Red Hat build of Podman Desktop -- the primary tool Parasol developers use for container-native development on the desktop.
+Now that your "workstation" is provisioned, let's explore the Red Hat build of Podman Desktop -- the primary tool Parasol developers use for container-native development on the desktop.
 
 === Connect to your virtual machine
 
