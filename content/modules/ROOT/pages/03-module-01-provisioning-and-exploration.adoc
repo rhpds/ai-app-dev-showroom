@@ -112,25 +112,28 @@ image::rhdh-vnc-link.png[VNC Console link in Developer Hub component page,link=s
 // TODO: Screenshot of VNC console connection
 image::vnc-console.png[VNC console connection to RHEL 10 VM,link=self,window=blank,width=700]
 
-. Log in to the virtual machine desktop using the provided credentials.
+. Click on the user `labuser` and enter the password `labpassword`. After a few moments, you will land on the desktop. You can press `Skip` to skip the tour.
 +
 // TODO: Screenshot of RHEL 10 desktop after login
 image::rhel-desktop.png[RHEL 10 desktop environment,link=self,window=blank,width=700]
 
 === Launch Podman Desktop
 
+Click the "9-dot" menu at the bottom (if you do not see this, click the red fedora at the upper left).
+
 . Find and launch the **Red Hat build of Podman Desktop** from the application menu or desktop shortcut.
 +
 // TODO: Screenshot of launching Podman Desktop
 image::podman-desktop-launch.png[Launching Podman Desktop from RHEL 10,link=self,window=blank,width=700]
 
-. Once Podman Desktop opens, take a moment to explore the interface:
+. Once Podman Desktop opens, click `Skip` to skip configuration (it is already configured). Take a moment to explore the interface and the sections on the left, the most important of which are:
 +
-* **Dashboard**: Overview of your container environment
+* **Dashboard**: Overview of your container environmentl
 * **Containers**: Running and stopped containers
 * **Images**: Available container images
 * **Pods**: Grouped containers
-* **Volumes**: Persistent storage
+* **Extensions**: Add-ons that provide additional functionality and integrations
+* **Kubernetes**: Manage Kubernetes clusters and workloads
 +
 // TODO: Screenshot of Podman Desktop dashboard
 image::podman-desktop-dashboard.png[Podman Desktop dashboard overview,link=self,window=blank,width=700]
@@ -142,11 +145,11 @@ image::podman-desktop-dashboard.png[Podman Desktop dashboard overview,link=self,
 // TODO: Screenshot of extensions page
 image::podman-desktop-extensions.png[Podman Desktop extensions page,link=self,window=blank,width=700]
 
-. Browse through the available extensions. You'll notice extensions for:
+. Click the `Catalog` tab to browse through the available extensions. You'll notice extensions for:
 +
-* Container registries
 * Kubernetes and OpenShift integration
 * Podman machine management
+* Podman AI extensions
 * And more
 +
 TIP: Extensions are how Podman Desktop stays lightweight while still supporting specialized workflows like AI development.
@@ -157,12 +160,10 @@ At Parasol, developers need a safe, local way to experiment with AI -- no more s
 
 === Install the AI Lab extension
 
-. In the Extensions view, search for **AI Lab** or locate it in the catalog.
-+
-// TODO: Screenshot of AI Lab extension in the catalog
-image::ai-lab-extension-catalog.png[AI Lab extension in the catalog,link=self,window=blank,width=700]
+. In the Catalog of extensions view, click the _Install_ button next to the **Podman AI Lab** extension.
 
-. Click **Install** to add the AI Lab extension to your Podman Desktop.
+
+. Click **Install** to add the AI Lab extension to your Podman Desktop (if if takes too long you may get a "Not responding" popup - just click _Wait_ and it should complete successfully). The extension will be installed, which may take a few moments as it pulls the necessary container images and sets up the environment.
 +
 // TODO: Screenshot of AI Lab installation progress
 image::ai-lab-installing.png[Installing AI Lab extension,link=self,window=blank,width=700]
@@ -177,13 +178,14 @@ image::ai-lab-nav.png[AI Lab icon in Podman Desktop navigation,link=self,window=
 . Click on the **AI Lab** icon to open it. Take a moment to explore the different sections:
 +
 * **Catalog**: Pre-built AI recipes covering chatbots, code generation, summarization, and more
-* **Models**: Available AI models you can download and run locally
+* **Recipes**: A collection of pre-built applications that you can run locally to see AI in action
 * **Playground**: An interactive space to experiment with models directly
 +
 // TODO: Screenshot of AI Lab main page
 image::ai-lab-main.png[AI Lab main page,link=self,window=blank,width=700]
 
-. Browse through the **Models** section. Notice the variety of models available -- different sizes, capabilities, and use cases. Developers can experiment with many different models to find what works best for their needs.
+. GPU Support is not yet enabled on Linux, so click the `Don't display anymoe` button at the top to dismiss the GPU support message.
+. Browse through the **Catalog** section. Notice the variety of recipes available -- different sizes, capabilities, and use cases. Developers can experiment with many different recipes to find what works best for their needs.
 +
 // TODO: Screenshot of models list
 image::ai-lab-models.png[Available models in AI Lab,link=self,window=blank,width=700]
@@ -192,7 +194,7 @@ image::ai-lab-models.png[Available models in AI Lab,link=self,window=blank,width
 
 The recipe catalog is where the magic happens. Each recipe is a fully working AI application that you can run locally, inspect, and take inspiration from for your own projects.
 
-. Navigate to the **Catalog** section in AI Lab.
+. Navigate to the **Recipe Catalog** section in AI Lab.
 +
 // TODO: Screenshot of the recipe catalog
 image::ai-lab-catalog.png[AI Lab recipe catalog,link=self,window=blank,width=700]
@@ -202,20 +204,23 @@ image::ai-lab-catalog.png[AI Lab recipe catalog,link=self,window=blank,width=700
 // TODO: Screenshot of the chatbot recipe in the catalog
 image::ai-lab-catalog-chatbot.png[Chatbot recipe in the AI Lab catalog,link=self,window=blank,width=700]
 
-. Click on the chatbot recipe to see its details, then click **Start** to instantiate it.
+. Click on the **More Details** link on the recipe card to see its details, then click **Start** to instantiate it.
 +
 // TODO: Screenshot of the chatbot recipe detail page with Start button
 image::ai-lab-chatbot-start.png[Starting the chatbot recipe,link=self,window=blank,width=700]
+
+. The defaut model `ibm-granite/granite-4.0-micro-GGUF` model will be selected. Click `Start ChatBot recipe` to confirm and start the recipe.
 
 . Wait for the recipe to pull the required model and start the application. This may take a few minutes as it downloads the model and builds the containers.
 +
 // TODO: Screenshot of the recipe starting/pulling
 image::ai-lab-chatbot-pulling.png[Chatbot recipe pulling model and starting,link=self,window=blank,width=700]
 
-. Once the recipe is running, click the link to open the chatbot application in your browser.
+. Once the recipe is running, click the **Open Details** link to open the chatbot application in your browser, and then click the **Open ChatBot** button to launch the chat interface using the Firefox browser on your VM:
 +
 // TODO: Screenshot of the running chatbot application
-image::ai-lab-chatbot-running.png[Chatbot application running locally,link=self,window=blank,width=700]
+image::ai-lab-chatbot-running.png[Chatbot application Running details,link=self,window=blank,width=700]
+image::ai-lab-chatbot-running2.png[Chatbot application running locally,link=self,window=blank,width=700]
 
 . Try asking the chatbot a few questions:
 +
@@ -228,6 +233,8 @@ What are the benefits of using containers for application development?
 ----
 Can you explain what a large language model is in simple terms?
 ----
++
+image::ai-lab-chatbot-running3.png[Chatting with the model,link=self,window=blank,width=700]
 
 . Take a moment to appreciate what just happened: you downloaded an AI model, spun up a fully working chatbot application, and tested it -- all locally, without any cloud API keys or third-party services. This is the kind of safe experimentation that the AI Lab enables.
 
