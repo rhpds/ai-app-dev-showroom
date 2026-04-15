@@ -128,7 +128,7 @@ image::podman-desktop-launch.png[Launching Podman Desktop from RHEL 10,link=self
 
 . Once Podman Desktop opens, click `Skip` to skip configuration (it is already configured). Take a moment to explore the interface and the sections on the left, the most important of which are:
 +
-* **Dashboard**: Overview of your container environmentl
+* **Dashboard**: Overview of your container environment
 * **Containers**: Running and stopped containers
 * **Images**: Available container images
 * **Pods**: Grouped containers
@@ -209,7 +209,7 @@ image::ai-lab-catalog-chatbot.png[Chatbot recipe in the AI Lab catalog,link=self
 // TODO: Screenshot of the chatbot recipe detail page with Start button
 image::ai-lab-chatbot-start.png[Starting the chatbot recipe,link=self,window=blank,width=700]
 
-. The defaut model `ibm-granite/granite-4.0-micro-GGUF` model will be selected. Click `Start ChatBot recipe` to confirm and start the recipe.
+. The default model `ibm-granite/granite-4.0-micro-GGUF` model will be selected. Click `Start ChatBot recipe` to confirm and start the recipe.
 
 . Wait for the recipe to pull the required model and start the application. This may take a few minutes as it downloads the model and builds the containers.
 +
