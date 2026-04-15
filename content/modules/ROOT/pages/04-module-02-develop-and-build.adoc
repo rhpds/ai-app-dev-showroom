@@ -284,6 +284,11 @@ image::podman-desktop-deploy-namespace.png[Selecting namespace for deployment,li
 === Verify the deployment on OpenShift
 
 . Switch to the **OCP Console** tab.
++
+TIP: Because the OCP Console is embedded in the lab's right pane, the left navigation menu is hidden by default. Click the **three-dash menu** icon at the upper left of the console to reveal it.
++
+// TODO: Screenshot of the three-dash menu button in the OCP Console
+image::ocp-console-nav-menu.png[Three-dash menu button in OCP Console,link=self,window=blank,width=700]
 
 . Make sure the `{user}-demo` project is selected in the project dropdown at the top.
 
