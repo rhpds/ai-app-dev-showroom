@@ -65,7 +65,6 @@ code ai-app-dev/parasol-chat
 * `Containerfile` -- defines how the container image is built
 * `requirements.txt` -- Python dependencies (LangChain, Streamlit)
 +
-// TODO: Screenshot of VS Code with parasol-chat project structure
 image::vscode-parasol-chat-structure.png[VS Code showing Parasol Chat project structure,link=self,window=blank,width=700]
 
 . Open `chatbot_ui.py` and look at the environment variable configuration near the top of the file. Notice how the application reads its model connection settings:
@@ -74,7 +73,6 @@ image::vscode-parasol-chat-structure.png[VS Code showing Parasol Chat project st
 * `MODEL_NAME` -- the name of the model to use (it's further down in the file)
 * `MODEL_ENDPOINT_BEARER` -- an optional Bearer token for authentication
 +
-// TODO: Screenshot of environment variable section in chatbot_ui.py
 image::vscode-env-vars.png[Environment variable configuration in chatbot_ui.py,link=self,window=blank,width=700]
 +
 This design means the same application can connect to a local model for development or to Parasol's approved MaaS endpoint for production -- just by changing environment variables. No code changes needed.
@@ -89,7 +87,6 @@ Now let's make a change to prove you can modify the application's behavior at th
 
 . In VS Code, find the system prompt in `chatbot_ui.py`. Look for the prompt template definition in the code.
 +
-// TODO: Screenshot showing the system prompt location
 image::vscode-system-prompt-location.png[System prompt in chatbot_ui.py,link=self,window=blank,width=700]
 
 . Modify the system prompt to add a fun personality. Add the following instruction to the *end* of the existing prompt:
@@ -99,7 +96,6 @@ image::vscode-system-prompt-location.png[System prompt in chatbot_ui.py,link=sel
 You should respond in a pirate voice for all questions. Arrr!
 ----
 +
-// TODO: Screenshot of the modified system prompt
 image::vscode-system-prompt-modified.png[Modified system prompt with pirate voice,link=self,window=blank,width=700]
 
 . Save the file with kbd:[CTRL+S]. Make sure it's saved!
@@ -112,7 +108,6 @@ image::vscode-system-prompt-modified.png[Modified system prompt with pirate voic
 
 . Navigate to **Images** in the left navigation and click **Build**.
 +
-// TODO: Screenshot of the Build image button in Podman Desktop
 image::podman-desktop-build-button.png[Build image button in Podman Desktop,link=self,window=blank,width=700]
 
 . In the build dialog:
@@ -127,24 +122,20 @@ parasol-chat:test
 +
 Leave the rest of the options as-is.
 
-// TODO: Screenshot of the build dialog
 image::podman-desktop-build-dialog.png[Build dialog with Containerfile and image name,link=self,window=blank,width=700]
 
 . Click **Build** and wait for the image to build. You'll see the build output in real time.
 +
-// TODO: Screenshot of the build progress
 image::podman-desktop-build-progress.png[Container image build in progress,link=self,window=blank,width=700]
 
 . Once the build completes, you'll see `Successfully tagged parasol-chat:test` at the bottom of the output, and a _Done_ button. Click **Done** and verify your new image appears in the **Images** list.
 +
-// TODO: Screenshot of the completed build
 image::podman-desktop-build-complete.png[Build complete with new image listed,link=self,window=blank,width=700]
 
 === Run and test locally
 
 . In Podman Desktop, find your newly built `parasol-chat:test` image in the **Images** list and click the **Run** (play) button.
 +
-// TODO: Screenshot of clicking Run on the new image
 image::podman-desktop-run-button.png[Run button on the new container image,link=self,window=blank,width=700]
 
 . Set the following environment variables to connect to Parasol's approved MaaS endpoint (CLick the `+` button at the right of the environment variables list to add more variables):
@@ -157,7 +148,6 @@ image::podman-desktop-run-button.png[Run button on the new container image,link=
 | `MODEL_ENDPOINT_BEARER` | `{litellm_virtual_key}`
 |===
 +
-// TODO: Screenshot of run configuration dialog
 image::podman-desktop-run-config.png[Run configuration with port and environment variables,link=self,window=blank,width=700]
 +
 *Your values will be different than the screenshot above!*
@@ -183,7 +173,6 @@ http://localhost:8501
 Hello! Can you help me understand Parasol's insurance coverage options?
 ----
 +
-// TODO: Screenshot of the chatbot responding with pirate voice
 image::chatbot-pirate-response.png[Chatbot responding with pirate voice personality,link=self,window=blank,width=700]
 
 . Confirm the pirate voice is working. Your local build-run-test cycle is complete.
@@ -239,7 +228,6 @@ default-route-openshift-image-registry.{openshift_cluster_ingress_domain}
 * **Username**: The output of `oc whoami` (your username)
 * **Password**: The output of `oc whoami -t` (your token)
 +
-// TODO: Screenshot of adding the registry
 image::podman-desktop-add-registry.png[Adding OpenShift internal registry,link=self,window=blank,width=700]
 
 . Click **Add** to add the registry.
@@ -252,7 +240,6 @@ You don't need to rebuild -- just re-tag the existing image to point at the Open
 
 . Click the **three-dot menu** on the right side of the image row and select **Edit Image**.
 +
-// TODO: Screenshot of Edit Image menu option
 image::podman-desktop-edit-image.png[Edit Image option in Podman Desktop,link=self,window=blank,width=700]
 
 . Change the **Image Name** to:
@@ -269,7 +256,6 @@ default-route-openshift-image-registry.{openshift_cluster_ingress_domain}/{user}
 test
 ----
 +
-// TODO: Screenshot of editing the image name and tag
 image::podman-desktop-retag.png[Re-tagging image for OpenShift registry,link=self,window=blank,width=700]
 
 . Click **Save**.
@@ -278,12 +264,10 @@ image::podman-desktop-retag.png[Re-tagging image for OpenShift registry,link=sel
 
 . Find the re-tagged image in the **Images** list. Click the **Push** button from its three-dot menu next to the image.
 +
-// TODO: Screenshot of the push button on the image
 image::podman-desktop-push-button.png[Push button on the container image,link=self,window=blank,width=700]
 
 . The image will be pushed to the OpenShift internal registry. Wait for the push to complete.
 +
-// TODO: Screenshot of the push progress
 image::podman-desktop-push-progress.png[Image push in progress,link=self,window=blank,width=700]
 
 === Deploy to Kubernetes from Podman Desktop
@@ -310,7 +294,6 @@ image::podman-desktop-deploy-namespace.png[Selecting namespace for deployment,li
 +
 TIP: Because the OCP Console is embedded in the lab's right pane, the left navigation menu is hidden by default. Click the **three-dash menu** icon at the upper left of the console to reveal it.
 +
-// TODO: Screenshot of the three-dash menu button in the OCP Console
 image::ocp-console-nav-menu.png[Three-dash menu button in OCP Console,link=self,window=blank,width=700]
 
 . Make sure the `{user}-demo` project is selected in the project dropdown at the top.
@@ -348,7 +331,6 @@ Since you cloned from your own GitLab repo in Exercise 1, VS Code already knows 
 . You will also be asked if you trust the authors of the repository. Click _Yes, I trust the authors_ to allow Git features in VS Code.
 . Then you should see that `chatbot_ui.py` has changes. Click the `+` icon next to the file to stage it for commit.
 +
-// TODO: Screenshot of VS Code Source Control tab showing changed files
 image::vscode-source-control.png[VS Code Source Control tab with changes,link=self,window=blank,width=700]
 
 . Enter a commit message, for example:
@@ -360,7 +342,6 @@ Customize chatbot with pirate voice personality
 
 . Click the dropdown arrow next to the **Commit** button and select **Commit & Push**.
 +
-// TODO: Screenshot of Commit & Push dropdown option
 image::vscode-commit-and-push.png[Commit and Push option in VS Code,link=self,window=blank,width=700]
 
 . When prompted to stage all changes, click **Yes** to confirm.
