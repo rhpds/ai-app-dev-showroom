@@ -22,7 +22,20 @@ By the end of this module, you'll be able to:
 
 === Clone the repository
 
-. Open a terminal on your RHEL 10 virtual machine.
+. Open a terminal on your RHEL 10 virtual machine (Click the red fedora icon at the top left, type `terminal` in the search box, and double-click on the Terminal icon)
+
+. Log into the OpenShift cluster as your user with the following command:
++
+[source,bash,role=execute,subs="attributes+"]
+----
+oc login -u {user} \
+    -p {password} \
+    https://kubernetes.default.svc \
+    --insecure-skip-tls-verify=true && \
+    oc project {user}-demo
+----
++
+This has the added benefit of setting the Kubernetes context, which Podman Desktop will use later to connect to the cluster.
 
 . Clone your application repository from GitLab (this is the repo that was scaffolded by the RHDH template in Module 1):
 +
@@ -31,12 +44,18 @@ By the end of this module, you'll be able to:
 git clone https://gitlab-gitlab.{openshift_cluster_ingress_domain}/{user}/ai-app-dev.git
 ----
 
-. Open the `parasol-chat` subdirectory in VS Code:
+. Open the `parasol-chat` subdirectory in VS Code by running this command:
 +
 [source,bash,role=execute]
 ----
 code ai-app-dev/parasol-chat
 ----
+
+. On the trust pop-up, choose _Yes, I trust the authors_ to allow VS Code to open the folder in unrestricted mode.
+
+. Optionally install the python extension when prompted by VS Code to enable Python language features (this is not required, but it will enhance your experience when working with the Python code).
+
+. When prompted "A git repository was detected in the folder. Do you want to open the repository?", just dismiss it (we won't be editing files in other folders).
 
 === Inspect the source code
 
@@ -51,8 +70,8 @@ image::vscode-parasol-chat-structure.png[VS Code showing Parasol Chat project st
 
 . Open `chatbot_ui.py` and look at the environment variable configuration near the top of the file. Notice how the application reads its model connection settings:
 +
-* `MODEL_ENDPOINT` -- the base URL for the AI model service (defaults to `http://localhost:8001`)
-* `MODEL_NAME` -- the name of the model to use
+* `MODEL_ENDPOINT` -- the base URL for the AI model service (defaults to `http://localhost:8001/v1`)
+* `MODEL_NAME` -- the name of the model to use (it's further down in the file)
 * `MODEL_ENDPOINT_BEARER` -- an optional Bearer token for authentication
 +
 // TODO: Screenshot of environment variable section in chatbot_ui.py
@@ -83,13 +102,13 @@ You should respond in a pirate voice for all questions. Arrr!
 // TODO: Screenshot of the modified system prompt
 image::vscode-system-prompt-modified.png[Modified system prompt with pirate voice,link=self,window=blank,width=700]
 
-. Save the file.
+. Save the file with kbd:[CTRL+S]. Make sure it's saved!
 
 == Exercise 3: Build and test locally
 
 === Build the container image
 
-. Return to Podman Desktop.
+. Return to Podman Desktop (you can use the red fedora icon in the taskbar to switch back to it)
 
 . Navigate to **Images** in the left navigation and click **Build**.
 +
@@ -98,7 +117,7 @@ image::podman-desktop-build-button.png[Build image button in Podman Desktop,link
 
 . In the build dialog:
 +
-* **Containerfile path**: Browse to the `Containerfile` in the `parasol-chat` directory
+* **Containerfile path**: Browse to the `Containerfile` in the `parasol-chat` directory (it's at _HOME_/ai-app-dev/parasol-chat/Containerfile)
 * **Image name**: Enter:
 +
 [source,text,role=execute]
@@ -106,6 +125,8 @@ image::podman-desktop-build-button.png[Build image button in Podman Desktop,link
 parasol-chat:test
 ----
 +
+Leave the rest of the options as-is.
+
 // TODO: Screenshot of the build dialog
 image::podman-desktop-build-dialog.png[Build dialog with Containerfile and image name,link=self,window=blank,width=700]
 
@@ -114,7 +135,7 @@ image::podman-desktop-build-dialog.png[Build dialog with Containerfile and image
 // TODO: Screenshot of the build progress
 image::podman-desktop-build-progress.png[Container image build in progress,link=self,window=blank,width=700]
 
-. Once the build completes, verify your new image appears in the **Images** list.
+. Once the build completes, you'll see `Successfully tagged parasol-chat:test` at the bottom of the output, and a _Done_ button. Click **Done** and verify your new image appears in the **Images** list.
 +
 // TODO: Screenshot of the completed build
 image::podman-desktop-build-complete.png[Build complete with new image listed,link=self,window=blank,width=700]
@@ -126,27 +147,29 @@ image::podman-desktop-build-complete.png[Build complete with new image listed,li
 // TODO: Screenshot of clicking Run on the new image
 image::podman-desktop-run-button.png[Run button on the new container image,link=self,window=blank,width=700]
 
-. In the run configuration dialog, configure the port mapping:
-+
-* **Host port**: `8501`
-* **Container port**: `8501`
-+
-. Set the following environment variables to connect to Parasol's approved MaaS endpoint:
+. Set the following environment variables to connect to Parasol's approved MaaS endpoint (CLick the `+` button at the right of the environment variables list to add more variables):
 +
 [cols="1,2",options="header"]
 |===
 | Variable | Value
-| `MODEL_ENDPOINT` | `{maas_endpoint_url}`
-| `MODEL_NAME` | `{maas_model_name}`
-| `MODEL_ENDPOINT_BEARER` | `{maas_api_key}`
+| `MODEL_ENDPOINT` | `{litellm_api_base_url}`
+| `MODEL_NAME` | `qwen3-14b`
+| `MODEL_ENDPOINT_BEARER` | `{litellm_virtual_key}`
 |===
 +
 // TODO: Screenshot of run configuration dialog
 image::podman-desktop-run-config.png[Run configuration with port and environment variables,link=self,window=blank,width=700]
++
+*Your values will be different than the screenshot above!*
 
-. Click **Start** to run the container.
+. Click **Start Container** to run the container.
++
+[WARNING]
+====
+If you get an error such as `Error (HTTP code 500) server error - rootlessport conflict with ID 1` - there are running containers or pods in conflict (you may have left running from prior exercises). Return to the **Containers** view in Podman Desktop, stop any running containers and pods, and try starting the chatbot container again.
+====
 
-. Open Firefox on the VM and navigate to:
+. Open Firefox by clicking on the red fedora at the top left and typing `firefox` in the search box at the top, and double-clicking on the Firefox icon. Enter the following address to navigate to the running app:
 +
 [source,text,role=execute]
 ----
@@ -219,7 +242,7 @@ default-route-openshift-image-registry.{openshift_cluster_ingress_domain}
 // TODO: Screenshot of adding the registry
 image::podman-desktop-add-registry.png[Adding OpenShift internal registry,link=self,window=blank,width=700]
 
-. Click **Save** to add the registry.
+. Click **Add** to add the registry.
 
 === Re-tag the image for the OpenShift registry
 
@@ -253,7 +276,7 @@ image::podman-desktop-retag.png[Re-tagging image for OpenShift registry,link=sel
 
 === Push the image to OpenShift
 
-. Find the re-tagged image in the **Images** list. Click the **Push** button (the up arrow icon) next to the image.
+. Find the re-tagged image in the **Images** list. Click the **Push** button from its three-dot menu next to the image.
 +
 // TODO: Screenshot of the push button on the image
 image::podman-desktop-push-button.png[Push button on the container image,link=self,window=blank,width=700]
@@ -265,7 +288,7 @@ image::podman-desktop-push-progress.png[Image push in progress,link=self,window=
 
 === Deploy to Kubernetes from Podman Desktop
 
-. In Podman Desktop, find the running container for your chatbot (from the local test earlier). Click on it to open its details.
+. In Podman Desktop, find the running container on the **Containers** tab for your chatbot (from the local test earlier). Click on the three-dot menu and choose **Deploy to Kubernetes**.
 
 . Click the **Deploy to Kubernetes** button.
 +
@@ -292,7 +315,7 @@ image::ocp-console-nav-menu.png[Three-dash menu button in OCP Console,link=self,
 
 . Make sure the `{user}-demo` project is selected in the project dropdown at the top.
 
-. Navigate to **Workloads** > **Topology** in the left menu. You should see your chatbot application deployed.
+. Navigate to **Workloads** > **Topology** in the left menu. You should see your `parasol-chat` chatbot application deployed.
 +
 // TODO: Screenshot of Topology view with deployed chatbot
 image::ocp-topology-deployed.png[Topology view showing deployed chatbot,link=self,window=blank,width=700]
@@ -321,6 +344,9 @@ With your application tested both locally and on the cluster, it's time to push 
 Since you cloned from your own GitLab repo in Exercise 1, VS Code already knows where to push.
 
 . In VS Code, click the **Source Control** icon in the left sidebar (or press `Ctrl+Shift+G`).
+. You will be asked to open the parent Git repository, which you should do.
+. You will also be asked if you trust the authors of the repository. Click _Yes, I trust the authors_ to allow Git features in VS Code.
+. Then you should see that `chatbot_ui.py` has changes. Click the `+` icon next to the file to stage it for commit.
 +
 // TODO: Screenshot of VS Code Source Control tab showing changed files
 image::vscode-source-control.png[VS Code Source Control tab with changes,link=self,window=blank,width=700]
