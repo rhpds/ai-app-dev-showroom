@@ -37,6 +37,14 @@ oc login -u {user} \
 +
 This has the added benefit of setting the Kubernetes context, which Podman Desktop will use later to connect to the cluster.
 
+. Configure your Git identity (needed for committing changes later):
++
+[source,bash,role=execute,subs="attributes+"]
+----
+git config --global user.name "{user}"
+git config --global user.email "{user}@parasol-insurance.com"
+----
+
 . Clone your application repository from GitLab (this is the repo that was scaffolded by the RHDH template in Module 1):
 +
 [source,bash,role=execute,subs="attributes+"]
