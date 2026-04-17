@@ -106,11 +106,14 @@ image::argocd-resource-tree.png[ArgoCD resource tree showing deployed resources,
 
 === Verify
 
-Confirm that:
+Once the pipeline completed, confirm that:
 
-* The ArgoCD application is visible and shows **Synced** status
+* The ArgoCD application is visible and shows **Progressing** status (or **Synced** if you waited too long)
 * The health status shows **Healthy**
-* You can see the deployed Kubernetes resources in the ArgoCD dashboard
+* You can see the new deployed Kubernetes resources in the ArgoCD dashboard
+
+image::argocd-resource-updates.png[ArgoCD resource tree showing updates,link=self,window=blank,width=700]
+
 
 == Exercise 3: Verify the live application on OpenShift
 

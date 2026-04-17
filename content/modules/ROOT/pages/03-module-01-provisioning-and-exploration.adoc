@@ -138,7 +138,6 @@ image::podman-desktop-dashboard.png[Podman Desktop dashboard overview,link=self,
 
 . Click on **Extensions** in the left navigation to see what's available. The Red Hat build of Podman Desktop supports a rich extension ecosystem.
 +
-// TODO: Screenshot of extensions page
 image::podman-desktop-extensions.png[Podman Desktop extensions page,link=self,window=blank,width=700]
 
 . Click the `Catalog` tab to browse through the available extensions. You'll notice extensions for:
@@ -180,6 +179,8 @@ image::ai-lab-main.png[AI Lab main page,link=self,window=blank,width=700]
 . GPU Support is not yet enabled on Linux, so click the `Don't display anymoe` button at the top to dismiss the GPU support message.
 . Browse through the **Catalog** section. Notice the variety of recipes available -- different sizes, capabilities, and use cases. Developers can experiment with many different recipes to find what works best for their needs.
 +
+TIP: All of the models and recipes you see here were pre-configured by Parasol's platform engineering team, so developers can use approved resources right out of the gate -- no need to hunt for models or worry about compliance.
++
 image::ai-lab-models.png[Available models in AI Lab,link=self,window=blank,width=700]
 
 === Run a recipe from the catalog
@@ -187,11 +188,8 @@ image::ai-lab-models.png[Available models in AI Lab,link=self,window=blank,width
 The recipe catalog is where the magic happens. Each recipe is a fully working AI application that you can run locally, inspect, and take inspiration from for your own projects.
 
 . Navigate to the **Recipe Catalog** section in AI Lab.
-+
-// TODO: Screenshot of the recipe catalog
-image::ai-lab-catalog.png[AI Lab recipe catalog,link=self,window=blank,width=700]
 
-. Find the **Chatbot** recipe in the catalog. This is a pre-built application that provides a web-based chat interface backed by an AI model.
+. Find the **Chatbot** recipe in the catalog (it should be the first one). This is a pre-built application that provides a web-based chat interface backed by an AI model.
 +
 image::ai-lab-catalog-chatbot.png[Chatbot recipe in the AI Lab catalog,link=self,window=blank,width=700]
 
@@ -199,7 +197,7 @@ image::ai-lab-catalog-chatbot.png[Chatbot recipe in the AI Lab catalog,link=self
 +
 image::ai-lab-chatbot-start.png[Starting the chatbot recipe,link=self,window=blank,width=700]
 
-. The default model `ibm-granite/granite-4.0-micro-GGUF` model will be selected. Click `Start ChatBot recipe` to confirm and start the recipe.
+. The default model `ibm-granite/granite-4.0-micro-GGUF` model will be selected. This is a quantized model designed to fit on typical laptops, but depending on available resources, it may not be as performant as you'd expect from a full-size model. Click `Start ChatBot recipe` to confirm and start the recipe.
 
 . Wait for the recipe to pull the required model and start the application. This may take a few minutes as it downloads the model and builds the containers.
 +
@@ -210,7 +208,7 @@ image::ai-lab-chatbot-pulling.png[Chatbot recipe pulling model and starting,link
 image::ai-lab-chatbot-running.png[Chatbot application Running details,link=self,window=blank,width=700]
 image::ai-lab-chatbot-running2.png[Chatbot application running locally,link=self,window=blank,width=700]
 
-. Try asking the chatbot a few questions:
+. Try asking the chatbot a few questions (the response will be slow -- more on this later):
 +
 [source,text,role=execute]
 ----
@@ -225,25 +223,34 @@ Can you explain what a large language model is in simple terms?
 image::ai-lab-chatbot-running3.png[Chatting with the model,link=self,window=blank,width=700]
 
 . Take a moment to appreciate what just happened: you downloaded an AI model, spun up a fully working chatbot application, and tested it -- all locally, without any cloud API keys or third-party services. This is the kind of safe experimentation that the AI Lab enables.
++
+NOTE: Developer desktops typically don't have enough horsepower to do much beyond simple prompts with local models. In Module 2, we'll connect to Parasol's IT-hosted AI services for production-quality performance.
+
+=== Delete the running recipe
+
+. Now that you've seen the recipe in action, let's clean it up. In Podman Desktop, navigate to the AI Lab and click on the **Running** tab for the chatbot recipe.
+
+. Click the **three-dot menu** and select **Delete AI App** to stop the running recipe. The source code that was cloned remains, and we'll look at that next.
++
+image::ai-lab-delete-recipe.png[Delete AI App from the three-dot menu,link=self,window=blank,width=700]
 
 === Inspect the recipe source code
 
 The recipes in AI Lab aren't black boxes. You can inspect their source code, understand how they work, and take inspiration for building your own AI applications.
 
-. Return to Podman Desktop and navigate to the running chatbot recipe in AI Lab.
+. Return to Podman Desktop and navigate to the chatbot recipe in AI Lab.
 
-. Click the **Open in VS Code** button on the recipe. This opens the locally cloned recipe source code in VS Code.
+. Click the **Open in VS Code** button on the recipe. Click **Yes** on the _Open External Website_ dialog.
+. **Skip** the GitHub welcome screen (we're using GitLab for this workshop).  Also, click **Yes, I trust the authors** to allow VSCode to use unrestricted mode, and dismiss the Git dialog about opening the parent repository. This opens the locally cloned recipe source code in VS Code. 
 +
-// TODO: Screenshot of the "Open in VS Code" button on the recipe
 image::ai-lab-open-vscode.png[Open in VS Code button on the chatbot recipe,link=self,window=blank,width=700]
 
-. In VS Code, explore the project structure. Notice how the application is put together:
+. In VS Code, explore the project structure. Notice how the application is put together (most of the action is in the `chatbot_ui.py` file):
 +
 * How it connects to the AI model endpoint
 * How the chat interface handles conversation history
 * How environment variables are used to configure the model connection
 +
-// TODO: Screenshot of VS Code with the recipe source code structure
 image::vscode-recipe-structure.png[VS Code showing recipe source code structure,link=self,window=blank,width=700]
 
 . This is exactly the kind of inspiration that Parasol's developers have been using. By exploring these recipes, the team has been learning patterns for building AI-powered applications -- and they've used those patterns to build something of their own, which you'll work with in the next module.

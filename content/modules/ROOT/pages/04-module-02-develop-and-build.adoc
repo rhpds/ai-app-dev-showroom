@@ -30,7 +30,7 @@ By the end of this module, you'll be able to:
 ----
 oc login -u {user} \
     -p {password} \
-    https://kubernetes.default.svc \
+    {openshift_api_url} \
     --insecure-skip-tls-verify=true && \
     oc project {user}-demo
 ----
@@ -50,6 +50,8 @@ git clone https://gitlab-gitlab.{openshift_cluster_ingress_domain}/{user}/ai-app
 ----
 code ai-app-dev/parasol-chat
 ----
++
+This has the very same structure as the recipe used earlier. 
 
 . On the trust pop-up, choose _Yes, I trust the authors_ to allow VS Code to open the folder in unrestricted mode.
 
@@ -59,7 +61,7 @@ code ai-app-dev/parasol-chat
 
 === Inspect the source code
 
-. In VS Code, explore the project structure. It's a lean Python application:
+. In VS Code, explore the project structure. It's a lean Python application (same as before)
 +
 * `chatbot_ui.py` -- the main Streamlit application
 * `Containerfile` -- defines how the container image is built
@@ -134,7 +136,7 @@ image::podman-desktop-build-complete.png[Build complete with new image listed,li
 
 === Run and test locally
 
-. In Podman Desktop, find your newly built `parasol-chat:test` image in the **Images** list and click the **Run** (play) button.
+. In Podman Desktop, find your newly built `parasol-chat:test` image in the **Images** list (it should be at the top) and click the **Run** (play) button.
 +
 image::podman-desktop-run-button.png[Run button on the new container image,link=self,window=blank,width=700]
 
@@ -213,7 +215,6 @@ Copy the token output -- you'll need it in the next step.
 
 . In Podman Desktop, go to **Settings** > **Registries**.
 +
-// TODO: Screenshot of Podman Desktop registry settings
 image::podman-desktop-registries.png[Podman Desktop registry settings,link=self,window=blank,width=700]
 
 . Click **Add Registry** and enter the following:
@@ -273,24 +274,28 @@ image::podman-desktop-push-progress.png[Image push in progress,link=self,window=
 === Deploy to Kubernetes from Podman Desktop
 
 . In Podman Desktop, find the running container on the **Containers** tab for your chatbot (from the local test earlier). Click on the three-dot menu and choose **Deploy to Kubernetes**.
-
-. Click the **Deploy to Kubernetes** button.
 +
-// TODO: Screenshot of the Deploy to Kubernetes button
 image::podman-desktop-deploy-k8s.png[Deploy to Kubernetes button,link=self,window=blank,width=700]
-
-. In the deployment dialog, select your namespace from the dropdown:
 +
-* **Namespace**: `{user}-demo`
+This will generate the necessary Kubernetes objects to deploy the pod. Notice the name of the image in the `Pod` specification aligns with the tag we used when pushing to the internal OpenShift registry.
 +
-// TODO: Screenshot of namespace selection in deploy dialog
-image::podman-desktop-deploy-namespace.png[Selecting namespace for deployment,link=self,window=blank,width=700]
+Also notice the environment variables are given values in the Pod spec. In practice, for production scenarios these would be coming out of a Kubernetes _Secret_ but for this quick test we'll leave it hard-coded.
 
-. Click **Deploy** and wait for the deployment to complete.
+. In the deployment dialog, change the name of the pod to something more recognizable:
++
+* **Pod Name**: `parasol-chat-pod`
++
+image::podman-desktop-deploy-podname.png[Selecting pod name for deployment,link=self,window=blank,width=700]
+
+. Click **Deploy** and wait for the deployment to complete. You will see its progress in the box at the bottom:
++
+image::podman-desktop-deploy-progress.png[Deploy progress,link=self,window=blank,width=600]
++
+Wait for the Container to be `Running`. 
 
 === Verify the deployment on OpenShift
 
-. Switch to the **OCP Console** tab.
+. Go back to your lab instructions (outside of the VM) and switch to the **OCP Console** tab.
 +
 TIP: Because the OCP Console is embedded in the lab's right pane, the left navigation menu is hidden by default. Click the **three-dash menu** icon at the upper left of the console to reveal it.
 +
@@ -298,15 +303,17 @@ image::ocp-console-nav-menu.png[Three-dash menu button in OCP Console,link=self,
 
 . Make sure the `{user}-demo` project is selected in the project dropdown at the top.
 
-. Navigate to **Workloads** > **Topology** in the left menu. You should see your `parasol-chat` chatbot application deployed.
+. Navigate to **Workloads** > **Topology** in the left menu. You should see your `parasol-chat-pod` chatbot application deployed (you will see many other things deployed as part of the workshop, but look for the `parasol-chat-pod`)
 +
-// TODO: Screenshot of Topology view with deployed chatbot
 image::ocp-topology-deployed.png[Topology view showing deployed chatbot,link=self,window=blank,width=700]
 
-. Click the route icon on the application to open it in a new browser tab and confirm it's working on the cluster.
+. Click on the blue circle to open the _Resources_ for the Pod. Because the application exposes the chatbot on port 8501, click on the Route link for the Service on port 8501 to access the chatbot:
 +
-// TODO: Screenshot of the chatbot running on OpenShift
+image::chatbot-on-openshift-route.png[Route link,link=self,window=blank,width=700]
++
 image::chatbot-on-openshift.png[Chatbot running on OpenShift via Podman Desktop deploy,link=self,window=blank,width=700]
++
+Feel free to ask it more questions and confirm the app is running on the cluster successfully.
 
 You've now completed the full local development cycle: develop, build, test locally, push the image, and deploy to the cluster -- all from the desktop.
 
@@ -327,7 +334,10 @@ With your application tested both locally and on the cluster, it's time to push 
 Since you cloned from your own GitLab repo in Exercise 1, VS Code already knows where to push.
 
 . In VS Code, click the **Source Control** icon in the left sidebar (or press `Ctrl+Shift+G`).
-. You will be asked to open the parent Git repository, which you should do.
+. You will be asked to open the parent Git repository, click **Open Repository**, and click on the `ai-app-dev` repository at the top.
++ 
+image::vscode-open-parent.png[VS Code open parent repository,link=self,window=blank,width=700]
+
 . You will also be asked if you trust the authors of the repository. Click _Yes, I trust the authors_ to allow Git features in VS Code.
 . Then you should see that `chatbot_ui.py` has changes. Click the `+` icon next to the file to stage it for commit.
 +
