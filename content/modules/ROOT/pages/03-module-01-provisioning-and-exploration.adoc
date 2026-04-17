@@ -85,7 +85,11 @@ image::rhdh-component-overview.png[Component overview in Red Hat Developer Hub,l
 . Note the new links provided on the component page:
 +
 * **Virtual Machine**: A link into the OCP console to view details about your provisioned VM, including its status, resources, and connection info
-* **VNC Console**: Connect to your new virtual machine's desktop environment directly from Developer Hub
+* **Lab VNC Console Access**: Connect to your developer workstation (more on this in a moment)
++
+This is the power of self-service provisioning: in a real environment, a developer could provision a fully configured VM with all the tools they need, directly from Developer Hub, without filing tickets or waiting on IT. OpenShift Virtualization handles the VM lifecycle, and the developer gets a ready-to-use workstation in minutes.
+
+. Click the **Virtual Machine** link to see your VM running in the OCP console. You can see its status, resource allocation, and other details.
 
 === Verify
 
@@ -103,15 +107,15 @@ Now that your "workstation" is provisioned, let's explore the Red Hat build of P
 
 NOTE: The virtual machine in this workshop simulates a real developer desktop. All the tools you'll use here -- including Podman Desktop, VS Code, and the AI Lab extension -- can be installed directly on your own laptop. Podman Desktop is available for Linux, Windows, and Mac. We're using a VM in this workshop so you don't need to install anything locally.
 
-. In the Developer Hub component page, click the **VNC Console** link to open a VNC session to your virtual machine.
-+
-image::rhdh-vnc-link.png[VNC Console link in Developer Hub component page,link=self,window=blank,width=700]
+NOTE: To support the number of participants in this workshop, the developer workstation VMs are hosted on a separate, larger cluster with dedicated resources for the best experience. Your VM has been pre-configured with the same tools that were provisioned in the previous step.
 
-. The VNC console opens, showing your RHEL 10 desktop.
+. Return to the Developer Hub component page and click the **Lab VNC Console Access** link to connect to your developer workstation.
 +
-image::vnc-console.png[VNC console connection to RHEL 10 VM,link=self,window=blank,width=700]
+image::rhdh-vnc-link.png[Lab VNC Console Access link in Developer Hub component page,link=self,window=blank,width=700]
 
-. Click on the user `labuser` and enter the password `labpassword`. After a few moments, you will land on the desktop. You can press `Skip` to skip the tour.
+. Follow the instructions on the access page to connect to your VM desktop.
+
+. Once connected, you will land on the desktop. You can press `Skip` to skip the tour if prompted.
 +
 image::rhel-desktop.png[RHEL 10 desktop environment,link=self,window=blank,width=700]
 
