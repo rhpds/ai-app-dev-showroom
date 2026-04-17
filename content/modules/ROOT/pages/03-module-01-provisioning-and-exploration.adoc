@@ -255,6 +255,10 @@ image::vscode-recipe-structure.png[VS Code showing recipe source code structure,
 
 . This is exactly the kind of inspiration that Parasol's developers have been using. By exploring these recipes, the team has been learning patterns for building AI-powered applications -- and they've used those patterns to build something of their own, which you'll work with in the next module.
 
+. Close the VS Code window when you're done exploring (you'll open a fresh one in Module 2 with different source code, and having two open can be confusing).
++
+image::vscode-recipe-close.png[Close the recipe,link=self,window=blank,width=700]
+
 === Verify
 
 Confirm that:
