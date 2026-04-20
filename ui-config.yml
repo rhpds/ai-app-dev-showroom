@@ -11,16 +11,17 @@ view_switcher:
   default_mode: split
 
 tabs:
-  # Lab terminal
+  # Lab terminal — no auth needed
   - name: Terminal
     path: /terminal
     port: 443
 
-  # Podman Desktop — VNC via OCP Console standalone VM console
-  # Namespace and VM name are injected by AgV ocp4_workload_showroom_content_ui_config
-  - name: Podman Desktop
-    url: '${VNC_URL}'
-
-  # OCP Console
+  # OCP Console — student logs in here first via Keycloak SSO
+  # This establishes the session cookie needed for the VNC tab
   - name: OCP Console
     url: 'https://console-openshift-console.${DOMAIN}'
+
+  # Podman Desktop — VNC via OCP Console standalone VM console
+  # Works after student has logged into OCP Console above
+  - name: Podman Desktop
+    url: '${VNC_URL}'
