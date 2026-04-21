@@ -20,8 +20,3 @@ tabs:
   # This establishes the session cookie needed for the VNC tab
   - name: OCP Console
     url: 'https://console-openshift-console.${DOMAIN}'
-
-  # Podman Desktop — VNC via OCP Console standalone VM console
-  # Works after student has logged into OCP Console above
-  - name: Podman Desktop
-    url: '${VNC_URL}'
