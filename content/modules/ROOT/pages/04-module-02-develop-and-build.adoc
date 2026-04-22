@@ -191,7 +191,7 @@ image::podman-desktop-run-button.png[Run button on the new container image,link=
 [cols="1,2",options="header"]
 |===
 | Variable | Value
-| `MODEL_ENDPOINT` | `{litellm_api_base_url}`
+| `MODEL_ENDPOINT` | `pass:a[{litellm_api_base_url}]`
 | `MODEL_NAME` | `qwen3-14b`
 | `MODEL_ENDPOINT_BEARER` | `{litellm_virtual_key}`
 |===
