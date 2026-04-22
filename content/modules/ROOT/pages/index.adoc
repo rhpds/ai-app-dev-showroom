@@ -41,6 +41,8 @@ Password:
 {password}
 ----
 
+NOTE: The virtual machine desktop uses different credentials: username `labuser` and password `labpassword`.
+
 == Let's get started!
 
 Click the _Next_ link below to get started with **Module 1: Provisioning and exploration**.
