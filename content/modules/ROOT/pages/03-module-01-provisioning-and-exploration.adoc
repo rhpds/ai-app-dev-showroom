@@ -209,6 +209,8 @@ image::ai-lab-chatbot-pulling.png[Chatbot recipe pulling model and starting,link
 image::ai-lab-chatbot-running.png[Chatbot application Running details,link=self,window=blank,width=700]
 image::ai-lab-chatbot-running2.png[Chatbot application running locally,link=self,window=blank,width=700]
 
+TIP: To paste text from the lab instructions into the VM, use the **Paste to console** button at the top of the VM console screen. This copies any text from your laptop's clipboard into the VM.
+
 . Try asking the chatbot a few questions (the response will be slow -- more on this later):
 +
 [source,text,role=execute]
