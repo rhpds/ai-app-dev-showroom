@@ -22,10 +22,10 @@ Your manager has told you: "We need to move fast on AI, but we can't keep doing 
 
 Everything is pre-configured. Access all services through the tabs at the top of the right pane:
 
-* **OCP Console** -- OpenShift cluster console
-* **Developer Hub** -- Red Hat Developer Hub
-* **GitLab** -- Source code repositories
-* **ArgoCD** -- GitOps deployment dashboard
+* **OCP Console** -- The Red Hat OpenShift cluster console. OpenShift is Parasol's enterprise Kubernetes platform, providing the foundation for running containers, virtual machines, and AI workloads at scale.
+* **Developer Hub** -- Red Hat Developer Hub is Parasol's internal developer portal, built on Backstage. It provides self-service templates, a software catalog, and a single pane of glass for CI/CD -- reducing onboarding time and eliminating the need to context-switch between tools.
+* **GitLab** -- Parasol's source code management platform. GitLab hosts the application repositories and triggers automated pipelines when code is pushed -- a key part of closing the gap between development and production.
+* **ArgoCD** -- OpenShift GitOps powered by ArgoCD continuously monitors Git repositories and automatically syncs application deployments to the cluster, ensuring what's in Git is what's running in production.
 
 Your credentials for all services:
 
