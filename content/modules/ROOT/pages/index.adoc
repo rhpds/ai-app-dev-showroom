@@ -26,18 +26,6 @@ Everything is pre-configured. Access all services through the tabs at the top of
 * **Developer Hub** -- Red Hat Developer Hub
 * **GitLab** -- Source code repositories
 * **ArgoCD** -- GitOps deployment dashboard
-* **Terminal** -- Command-line access
-
-NOTE: To use the Terminal tab with the OpenShift CLI, you'll need to log in first. Run the following command in the Terminal:
-
-[source,bash,role=execute,subs="attributes+"]
-----
-oc login -u {user} \
-    -p {password} \
-    https://kubernetes.default.svc \
-    --insecure-skip-tls-verify=true && \
-    oc project {user}-demo
-----
 
 Your credentials for all services:
 
