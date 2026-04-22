@@ -51,17 +51,28 @@ image::ocp-pipeline-tasks.png[Pipeline tasks completing successfully,link=self,w
 
 . Wait for the pipeline to complete. All tasks should show a green checkmark.
 +
-You can click on each task to see its logs. The **build-image** task logs will look familiar -- it's running the same `Containerfile` you built locally in Module 2 with Podman Desktop.
+You can click on each task to see its logs. The **build-image** task logs will look familiar -- it's building the container image using the same `Containerfile` from Module 2.
 +
 image::ocp-pipeline-build-logs.png[Build task logs showing Containerfile build,link=self,window=blank,width=700]
 +
 TIP: This automated pipeline replaces the 3-5 day manual handoff process at Parasol. The same Containerfile used locally builds the production image -- eliminating the "works on my machine" problem.
 
+=== View the pipeline in Developer Hub
+
+You can also view this same pipeline information directly from Developer Hub -- no need to switch to the OCP Console at all.
+
+. Switch to the **Developer Hub** tab and navigate to your component. Click on the **CI** tab to see your pipeline runs, their status, and logs for each task.
++
+// TODO: Screenshot of CI tab in RHDH showing pipeline runs
+image::rhdh-ci-tab.png[CI tab in Developer Hub showing pipeline runs,link=self,window=blank,width=700]
+
+By configuring Red Hat Developer Hub as a single pane of glass, platform engineers can increase developer productivity by minimizing "console fatigue." Developers don't need to context-switch between the OCP Console, ArgoCD, GitLab, and other tools for their daily work -- everything they need is accessible from one place.
+
 === Verify
 
 Confirm that:
 
-* The pipeline run is visible in the OpenShift console under **Pipelines**
+* The pipeline run is visible in the OpenShift console under **Pipelines** and in Developer Hub under the **CI** tab
 * All three tasks (clone, build-image, restart-rollout) completed successfully with green checkmarks
 * The container image was built and pushed to the internal registry
 
@@ -123,7 +134,9 @@ Your AI chatbot has been deployed through the production CI/CD pipeline. Let's v
 
 . Switch to the **Developer Hub** tab and navigate to your component (you may need to sign in again). To find it, click on **Catalog** in the left menu, then filter by "Owned" and click on your component (named `ai-app-dev`).
 
-. Click on the **Topology** tab. You should see your chatbot application deployed and running.
+. Click on the **Topology** tab. You should see your running chatbot app and your desktop VM side by side. Notice that you only see resources relevant to your application -- not the other infrastructure running in the namespace. The RHDH Topology view is customized to show only what matters to the developer.
++
+NOTE: If you see a loading error on the Topology tab, do a hard refresh in your browser (kbd:[CTRL+SHIFT+R] or kbd:[CMD+SHIFT+R] on Mac).
 +
 image::rhdh-topology-chatbot.png[RHDH Topology view showing deployed chatbot application,link=self,window=blank,width=700]
 

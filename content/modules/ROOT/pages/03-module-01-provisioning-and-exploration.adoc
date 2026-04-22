@@ -101,7 +101,7 @@ Now that your "workstation" is provisioned, let's explore the Red Hat build of P
 
 === Connect to your virtual machine
 
-NOTE: The virtual machine in this workshop simulates a real developer desktop. All the tools you'll use here -- including Podman Desktop, VS Code, and the AI Lab extension -- can be installed directly on your own laptop. Podman Desktop is available for Linux, Windows, and Mac. We're using a VM in this workshop so you don't need to install anything locally.
+NOTE: The virtual machine in this workshop simulates a real developer desktop. All the tools you'll use here -- including Podman Desktop, VS Code, and the AI Lab extension -- can be installed directly on your own laptop. Podman Desktop is available for Linux, Windows, and Mac. We're using a VM in this workshop so you don't need to install anything locally. Since this is a shared system supporting many participants, performance may be slower than what you'd experience on your own machine -- please don't judge the tools by the workshop VM's performance!
 
 . In the Developer Hub component page, click the **VNC Console** link to open a VNC session to your virtual machine.
 +
@@ -242,7 +242,9 @@ The recipes in AI Lab aren't black boxes. You can inspect their source code, und
 . Return to Podman Desktop and navigate to the chatbot recipe in AI Lab.
 
 . Click the **Open in VS Code** button on the recipe. Click **Yes** on the _Open External Website_ dialog.
-. **Skip** the GitHub welcome screen (we're using GitLab for this workshop).  Also, click **Yes, I trust the authors** to allow VSCode to use unrestricted mode, and dismiss the Git dialog about opening the parent repository. This opens the locally cloned recipe source code in VS Code. 
+. **Skip** the GitHub welcome screen (we're using GitLab for this workshop). Dismiss the Git dialog about opening the parent repository. This opens the locally cloned recipe source code in VS Code.
++
+TIP: If prompted to install the Python extension, you can optionally install it for enhanced syntax highlighting and code navigation. It's not required for this workshop. 
 +
 image::ai-lab-open-vscode.png[Open in VS Code button on the chatbot recipe,link=self,window=blank,width=700]
 

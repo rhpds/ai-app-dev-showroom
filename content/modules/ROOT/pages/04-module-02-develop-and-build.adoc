@@ -23,6 +23,10 @@ By the end of this module, you'll be able to:
 === Clone the repository
 
 . Open a terminal on your RHEL 10 virtual machine (Click the red fedora icon at the top left, type `terminal` in the search box, and double-click on the Terminal icon)
++
+NOTE: You may see a `Failed Units: 1 mcelog.service` message in the terminal. This is harmless -- `mcelog` monitors hardware CPU errors and doesn't apply inside a virtual machine. You can safely ignore it.
+
+TIP: To paste text from the lab instructions into the VM, use the **Paste to console** button at the top of the VM console screen. This copies any text from your laptop's clipboard into the VM.
 
 . Log into the OpenShift cluster as your user with the following command:
 +
@@ -36,14 +40,6 @@ oc login -u {user} \
 ----
 +
 This has the added benefit of setting the Kubernetes context, which Podman Desktop will use later to connect to the cluster.
-
-. Configure your Git identity (needed for committing changes later):
-+
-[source,bash,role=execute,subs="attributes+"]
-----
-git config --global user.name "{user}"
-git config --global user.email "{user}@parasol-insurance.com"
-----
 
 . Clone your application repository from GitLab (this is the repo that was scaffolded by the RHDH template in Module 1):
 +
@@ -60,8 +56,6 @@ code ai-app-dev/parasol-chat
 ----
 +
 This has the very same structure as the recipe used earlier. 
-
-. On the trust pop-up, choose _Yes, I trust the authors_ to allow VS Code to open the folder in unrestricted mode.
 
 . Optionally install the python extension when prompted by VS Code to enable Python language features (this is not required, but it will enhance your experience when working with the Python code).
 
@@ -108,26 +102,70 @@ You should respond in a pirate voice for all questions. Arrr!
 +
 image::vscode-system-prompt-modified.png[Modified system prompt with pirate voice,link=self,window=blank,width=700]
 
-. Save the file with kbd:[CTRL+S]. Make sure it's saved!
+. The file will be saved automatically (auto-save is enabled).
 
 == Exercise 3: Build and test locally
 
+=== Add the OpenShift internal registry
+
+Before building, let's configure Podman Desktop to talk to the OpenShift internal registry. This way we can tag the image for the registry from the start, avoiding a re-tag later. In this workshop we're using the OpenShift internal registry, but in practice you could also use Quay.io, Docker Hub, or your enterprise artifact registry.
+
+Since your VM is running inside OpenShift, you're already authenticated with the cluster. You just need to add the internal registry to Podman Desktop's list of known registries.
+
+. First, get your credentials from a terminal on the VM. Run:
++
+[source,bash,role=execute]
+----
+oc whoami
+----
++
+This returns your username (e.g., `{user}`).
+
+. Get your authentication token:
++
+[source,bash,role=execute]
+----
+oc whoami -t
+----
++
+Copy the token output -- you'll need it in the next step.
++
+TIP: To copy and paste between apps _within_ the VM, select the text and right-click > **Copy** (or kbd:[CTRL+SHIFT+C]), then right-click > **Paste** (or kbd:[CTRL+SHIFT+V]) in the target app.
+
+. In Podman Desktop, go to **Settings** > **Registries**.
++
+image::podman-desktop-registries.png[Podman Desktop registry settings,link=self,window=blank,width=700]
+
+. Click **Add Registry** and enter the following:
++
+* **Registry URL**:
++
+[source,text,role=execute,subs="attributes+"]
+----
+default-route-openshift-image-registry.{openshift_cluster_ingress_domain}
+----
++
+* **Username**: The output of `oc whoami` (your username)
+* **Password**: The output of `oc whoami -t` (your token)
++
+image::podman-desktop-add-registry.png[Adding OpenShift internal registry,link=self,window=blank,width=700]
+
+. Click **Add** to add the registry.
+
 === Build the container image
 
-. Return to Podman Desktop (you can use the red fedora icon in the taskbar to switch back to it)
-
-. Navigate to **Images** in the left navigation and click **Build**.
+. Return to Podman Desktop and navigate to **Images** in the left navigation and click **Build**.
 +
 image::podman-desktop-build-button.png[Build image button in Podman Desktop,link=self,window=blank,width=700]
 
 . In the build dialog:
 +
 * **Containerfile path**: Browse to the `Containerfile` in the `parasol-chat` directory (it's at _HOME_/ai-app-dev/parasol-chat/Containerfile)
-* **Image name**: Enter:
+* **Image name**: Enter the full registry path so the image is ready to push later:
 +
-[source,text,role=execute]
+[source,text,role=execute,subs="attributes+"]
 ----
-parasol-chat:test
+default-route-openshift-image-registry.{openshift_cluster_ingress_domain}/{user}-demo/parasol-chat:test
 ----
 +
 Leave the rest of the options as-is.
@@ -138,13 +176,13 @@ image::podman-desktop-build-dialog.png[Build dialog with Containerfile and image
 +
 image::podman-desktop-build-progress.png[Container image build in progress,link=self,window=blank,width=700]
 
-. Once the build completes, you'll see `Successfully tagged parasol-chat:test` at the bottom of the output, and a _Done_ button. Click **Done** and verify your new image appears in the **Images** list.
+. Once the build completes, you'll see a success message at the bottom of the output, and a _Done_ button. Click **Done** and verify your new image appears in the **Images** list.
 +
 image::podman-desktop-build-complete.png[Build complete with new image listed,link=self,window=blank,width=700]
 
 === Run and test locally
 
-. In Podman Desktop, find your newly built `parasol-chat:test` image in the **Images** list (it should be at the top) and click the **Run** (play) button.
+. In Podman Desktop, find your newly built image in the **Images** list (it should be at the top) and click the **Run** (play) button.
 +
 image::podman-desktop-run-button.png[Run button on the new container image,link=self,window=blank,width=700]
 
@@ -185,7 +223,7 @@ Hello! Can you help me understand Parasol's insurance coverage options?
 +
 image::chatbot-pirate-response.png[Chatbot responding with pirate voice personality,link=self,window=blank,width=700]
 
-. Confirm the pirate voice is working. Your local build-run-test cycle is complete.
+. Confirm the pirate voice is working -- and notice how much faster the response is compared to the local model in Module 1! That's the power of Parasol's IT-hosted MaaS endpoint. Your local build-run-test cycle is complete.
 
 === Verify
 
@@ -199,83 +237,15 @@ Confirm that:
 
 Your app works locally, but will it work on the cluster? Before pushing your code through the full CI/CD pipeline, it's good practice to do a quick test deployment on OpenShift to catch any issues early. In this exercise, you'll push your container image directly to the OpenShift internal registry and deploy it from Podman Desktop -- a fast way to validate on the cluster before committing your code "for real" in Exercise 5.
 
-=== Add the OpenShift internal registry
-
-Since your VM is running inside OpenShift, you're already authenticated with the cluster. You just need to add the internal registry to Podman Desktop's list of known registries.
-
-. First, get your credentials from a terminal on the VM. Run:
-+
-[source,bash,role=execute]
-----
-oc whoami
-----
-+
-This returns your username (e.g., `{user}`).
-
-. Get your authentication token:
-+
-[source,bash,role=execute]
-----
-oc whoami -t
-----
-+
-Copy the token output -- you'll need it in the next step.
-
-. In Podman Desktop, go to **Settings** > **Registries**.
-+
-image::podman-desktop-registries.png[Podman Desktop registry settings,link=self,window=blank,width=700]
-
-. Click **Add Registry** and enter the following:
-+
-* **Registry URL**:
-+
-[source,text,role=execute,subs="attributes+"]
-----
-default-route-openshift-image-registry.{openshift_cluster_ingress_domain}
-----
-+
-* **Username**: The output of `oc whoami` (your username)
-* **Password**: The output of `oc whoami -t` (your token)
-+
-image::podman-desktop-add-registry.png[Adding OpenShift internal registry,link=self,window=blank,width=700]
-
-. Click **Add** to add the registry.
-
-=== Re-tag the image for the OpenShift registry
-
-You don't need to rebuild -- just re-tag the existing image to point at the OpenShift internal registry.
-
-. In Podman Desktop, navigate to **Images** and find your `parasol-chat:test` image.
-
-. Click the **three-dot menu** on the right side of the image row and select **Edit Image**.
-+
-image::podman-desktop-edit-image.png[Edit Image option in Podman Desktop,link=self,window=blank,width=700]
-
-. Change the **Image Name** to:
-+
-[source,text,role=execute,subs="attributes+"]
-----
-default-route-openshift-image-registry.{openshift_cluster_ingress_domain}/{user}-demo/parasol-chat
-----
-
-. Set the **Image Tag** to:
-+
-[source,text,role=execute]
-----
-test
-----
-+
-image::podman-desktop-retag.png[Re-tagging image for OpenShift registry,link=self,window=blank,width=700]
-
-. Click **Save**.
-
 === Push the image to OpenShift
 
-. Find the re-tagged image in the **Images** list. Click the **Push** button from its three-dot menu next to the image.
+Since we tagged the image with the full registry path during the build, it's ready to push.
+
+. In Podman Desktop, navigate to **Images** and find your image in the list. Click the **Push** button from its three-dot menu next to the image.
 +
 image::podman-desktop-push-button.png[Push button on the container image,link=self,window=blank,width=700]
 
-. The image will be pushed to the OpenShift internal registry. Wait for the push to complete.
+. The destination registry should be auto-selected. Click **Push Image**. The image will be pushed to the OpenShift internal registry. Wait for the push to complete (the button will change to "Done").
 +
 image::podman-desktop-push-progress.png[Image push in progress,link=self,window=blank,width=700]
 
@@ -285,9 +255,9 @@ image::podman-desktop-push-progress.png[Image push in progress,link=self,window=
 +
 image::podman-desktop-deploy-k8s.png[Deploy to Kubernetes button,link=self,window=blank,width=700]
 +
-This will generate the necessary Kubernetes objects to deploy the pod. Notice the name of the image in the `Pod` specification aligns with the tag we used when pushing to the internal OpenShift registry.
+This will generate the necessary Kubernetes objects to deploy the pod. Notice the name of the image in the `Pod` specification aligns with the auto0generated name created when the container was created, but the image name specified at `spec.containers.image` aligns with the image name and tag used when pushing to the OpenShift registry.
 +
-Also notice the environment variables are given values in the Pod spec. In practice, for production scenarios these would be coming out of a Kubernetes _Secret_ but for this quick test we'll leave it hard-coded.
+Also notice the environment variables are given values in the Pod spec. In practice, for production scenarios these would be coming out of a Kubernetes _Secret_ (and they will in the next section) but for this quick test we'll leave it hard-coded.
 
 . In the deployment dialog, change the name of the pod to something more recognizable:
 +
@@ -299,9 +269,44 @@ image::podman-desktop-deploy-podname.png[Selecting pod name for deployment,link=
 +
 image::podman-desktop-deploy-progress.png[Deploy progress,link=self,window=blank,width=600]
 +
-Wait for the Container to be `Running`. 
+Wait for the Container to be `Running`.
 
-=== Verify the deployment on OpenShift
+=== Verify the deployment from Podman Desktop
+
+Podman Desktop integrates directly with OpenShift, so you can verify your deployment without leaving the desktop.
+
+. In Podman Desktop, click on the **Kubernetes** section in the left navigation. This shows all of the Kubernetes resources deployed in your namespace on the cluster.
++
+// TODO: Screenshot of Kubernetes section in Podman Desktop
+image::podman-desktop-kubernetes.png[Kubernetes resources in Podman Desktop,link=self,window=blank,width=700]
+
+. Click on the **Pods** page to see all pods running in your namespace. Type `parasol-chat` in the search box to filter for your test pod.
++
+// TODO: Screenshot of Pods page with parasol-chat filter
+image::podman-desktop-kubernetes-pods.png[Pods page filtered for parasol-chat,link=self,window=blank,width=700]
+
+. Click on your pod and select the **Logs** tab to see the running application output.
++
+// TODO: Screenshot of pod logs in Podman Desktop
+image::podman-desktop-pod-logs.png[Pod logs showing running chatbot,link=self,window=blank,width=700]
+
+. Click on **Ingresses and Routes** in the Kubernetes section. Find the route for your test pod on port `:8501` and click it to open the chatbot in Firefox (Agree to the external website question, and it may open in the background, so use the red fedora icon to switch to Firefox).
++
+// TODO: Screenshot of Ingresses and Routes page
+image::podman-desktop-routes.png[Ingresses and Routes showing chatbot route,link=self,window=blank,width=700]
+
+. Test the chatbot to confirm it's running on the cluster with the pirate voice:
++
+[source,text,role=execute]
+----
+Tell me about Parasol Insurance's coverage options!
+----
++
+image::chatbot-on-openshift.png[Chatbot running on OpenShift via Podman Desktop deploy,link=self,window=blank,width=700]
+
+=== Verify from the OCP Console
+
+You can also verify the deployment from the OpenShift console -- this is the same deployment you just viewed from Podman Desktop, showcasing the natural integration between the desktop tools and OpenShift. Development and testing can be done entirely from the desktop.
 
 . Go back to your lab instructions (outside of the VM) and switch to the **OCP Console** tab.
 +
@@ -314,14 +319,6 @@ image::ocp-console-nav-menu.png[Three-dash menu button in OCP Console,link=self,
 . Navigate to **Workloads** > **Topology** in the left menu. You should see your `parasol-chat-pod` chatbot application deployed (you will see many other things deployed as part of the workshop, but look for the `parasol-chat-pod`)
 +
 image::ocp-topology-deployed.png[Topology view showing deployed chatbot,link=self,window=blank,width=700]
-
-. Click on the blue circle to open the _Resources_ for the Pod. Because the application exposes the chatbot on port 8501, click on the Route link for the Service on port 8501 to access the chatbot:
-+
-image::chatbot-on-openshift-route.png[Route link,link=self,window=blank,width=700]
-+
-image::chatbot-on-openshift.png[Chatbot running on OpenShift via Podman Desktop deploy,link=self,window=blank,width=700]
-+
-Feel free to ask it more questions and confirm the app is running on the cluster successfully.
 
 You've now completed the full local development cycle: develop, build, test locally, push the image, and deploy to the cluster -- all from the desktop.
 
@@ -346,8 +343,7 @@ Since you cloned from your own GitLab repo in Exercise 1, VS Code already knows 
 + 
 image::vscode-open-parent.png[VS Code open parent repository,link=self,window=blank,width=700]
 
-. You will also be asked if you trust the authors of the repository. Click _Yes, I trust the authors_ to allow Git features in VS Code.
-. Then you should see that `chatbot_ui.py` has changes. Click the `+` icon next to the file to stage it for commit.
+. You should see that `chatbot_ui.py` has changes. Click the `+` icon next to the file to stage it for commit.
 +
 image::vscode-source-control.png[VS Code Source Control tab with changes,link=self,window=blank,width=700]
 
@@ -364,14 +360,14 @@ image::vscode-commit-and-push.png[Commit and Push option in VS Code,link=self,wi
 
 . When prompted to stage all changes, click **Yes** to confirm.
 +
-. If prompted for credentials, enter:
+. When prompted at the top of the VS Code window for your username and password, enter your credentials:
 +
 * **Username**: `{user}`
 * **Password**: `{password}`
 
 === Verify the push
 
-. Switch to the **GitLab** tab and navigate to your repository to confirm the code was pushed.
+. Switch to the **GitLab** tab and navigate to your repository at **{user} / ai-app-dev / parasol-chat** (not `rhdh/parasol-chat`, which is the base source) to confirm the code was pushed.
 +
 image::gitlab-pushed-commit.png[GitLab repository showing the pushed commit,link=self,window=blank,width=700]
 
