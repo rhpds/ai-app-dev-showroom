@@ -224,8 +224,8 @@ The "production gap" that kills so many AI projects? At Parasol, it no longer ex
 
 === Resources
 
-* link:https://developers.redhat.com/developer-hub[Red Hat Developer Hub^]
-* link:https://developers.redhat.com/products/podman-desktop/overview[Red Hat build of Podman Desktop^]
-* link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html/cicd/pipelines[OpenShift Pipelines documentation^]
-* link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html/cicd/gitops[OpenShift GitOps documentation^]
-* link:https://developers.redhat.com/products/openshift-ai/overview[OpenShift AI^]
+* link:https://developers.redhat.com/products/rhdh[Red Hat Developer Hub^]
+* link:https://developers.redhat.com/products/red-hat-build-podman-desktop[Red Hat build of Podman Desktop^]
+* link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.21/html/pipelines/index[OpenShift Pipelines documentation^]
+* link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.21/html/gitops/index[OpenShift GitOps documentation^]
+* link:https://www.redhat.com/en/products/ai/openshift-ai[OpenShift AI^]
