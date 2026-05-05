@@ -45,14 +45,14 @@ This has the added benefit of setting the Kubernetes context, which Podman Deskt
 +
 [source,bash,role=execute,subs="attributes+"]
 ----
-git clone https://gitlab-gitlab.{openshift_cluster_ingress_domain}/{user}/ai-app-dev.git
+git clone https://gitlab-gitlab.{openshift_cluster_ingress_domain}/{user}/ai-app-dev-{user}.git
 ----
 
 . Open the `parasol-chat` subdirectory in VS Code by running this command:
 +
-[source,bash,role=execute]
+[source,bash,role=execute,subs="attributes+"]
 ----
-code ai-app-dev/parasol-chat
+code ai-app-dev-{user}/parasol-chat
 ----
 +
 This has the very same structure as the recipe used earlier. 
@@ -160,7 +160,7 @@ image::podman-desktop-build-button.png[Build image button in Podman Desktop,link
 
 . In the build dialog:
 +
-* **Containerfile path**: Browse to the `Containerfile` in the `parasol-chat` directory (it's at _HOME_/ai-app-dev/parasol-chat/Containerfile)
+* **Containerfile path**: Browse to the `Containerfile` in the `parasol-chat` directory (it's at _HOME_/ai-app-dev-{user}/parasol-chat/Containerfile)
 * **Image name**: Enter the full registry path so the image is ready to push later:
 +
 [source,text,role=execute,subs="attributes+"]

@@ -45,7 +45,7 @@ image::rhdh-template-catalog.png[Template catalog showing AI App Dev - Parasol C
 
 . Fill in the template form with the following values:
 +
-* **Application Name**: Leave as the default (`ai-app-dev`)
+* **Application Name**: Enter a unique name (`ai-app-dev-{user}` is a good convention)
 * **Virtual Machine Name**: Leave as the default (`developer-workstation`) or enter a custom name
 +
 NOTE: The virtual machine name must contain only lowercase letters, numbers, and hyphens, and must start and end with an alphanumeric character.
