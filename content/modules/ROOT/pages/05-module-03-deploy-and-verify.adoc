@@ -93,9 +93,9 @@ image::argocd-login.png[ArgoCD login page,link=self,window=blank,width=700]
 +
 On the *Authorize Access* screen, click *Allow Selected Permissions* to grant ArgoCD access to your identity information.
 
-. Once logged in, you should see the `ai-app-dev` application. Click on it to see its details.
+. Once logged in, you should see the `ai-app-dev-{user}` application. Click on it to see its details.
 +
-image::argocd-app-overview.png[ArgoCD dashboard showing ai-app-dev application,link=self,window=blank,width=700]
+image::argocd-app-overview.png[ArgoCD dashboard showing application,link=self,window=blank,width=700]
 
 . The application will show one of the following states:
 +
@@ -132,7 +132,7 @@ Your AI chatbot has been deployed through the production CI/CD pipeline. Let's v
 
 === View the application in Developer Hub
 
-. Switch to the **Developer Hub** tab and navigate to your component (you may need to sign in again). To find it, click on **Catalog** in the left menu, then filter by "Owned" and click on your component (named `ai-app-dev`).
+. Switch to the **Developer Hub** tab and navigate to your component (you may need to sign in again). To find it, click on **Catalog** in the left menu, then filter by "Owned" and click on your component (named `ai-app-dev-{user}`).
 
 . Click on the **Topology** tab. You should see your running chatbot app and your desktop VM side by side. Notice that you only see resources relevant to your application -- not the other infrastructure running in the namespace. The RHDH Topology view is customized to show only what matters to the developer.
 +

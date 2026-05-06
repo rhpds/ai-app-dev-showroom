@@ -251,6 +251,14 @@ image::podman-desktop-push-progress.png[Image push in progress,link=self,window=
 
 === Deploy to Kubernetes from Podman Desktop
 
+[WARNING]
+====
+Before deploying, make sure Podman Desktop is using the correct Kubernetes context. Look at the bottom of the Podman Desktop window -- you should see a Kubernetes context selector. Click on it and choose the context that begins with your namespace (`{user}-demo`). If the wrong context is selected, the deployment will fail.
+====
+
+// TODO: Screenshot of Kubernetes context selector at bottom of Podman Desktop
+image::podman-desktop-kube-context.png[Kubernetes context selector in Podman Desktop,link=self,window=blank,width=700]
+
 . In Podman Desktop, find the running container on the **Containers** tab for your chatbot (from the local test earlier). Click on the three-dot menu and choose **Deploy to Kubernetes**.
 +
 image::podman-desktop-deploy-k8s.png[Deploy to Kubernetes button,link=self,window=blank,width=700]
@@ -339,7 +347,7 @@ With your application tested both locally and on the cluster, it's time to push 
 Since you cloned from your own GitLab repo in Exercise 1, VS Code already knows where to push.
 
 . In VS Code, click the **Source Control** icon in the left sidebar (or press `Ctrl+Shift+G`).
-. You will be asked to open the parent Git repository, click **Open Repository**, and click on the `ai-app-dev` repository at the top.
+. You will be asked to open the parent Git repository, click **Open Repository**, and click on the `ai-app-dev-{user}` repository at the top.
 + 
 image::vscode-open-parent.png[VS Code open parent repository,link=self,window=blank,width=700]
 
@@ -367,7 +375,7 @@ image::vscode-commit-and-push.png[Commit and Push option in VS Code,link=self,wi
 
 === Verify the push
 
-. Switch to the **GitLab** tab and navigate to your repository at **{user} / ai-app-dev / parasol-chat** (not `rhdh/parasol-chat`, which is the base source) to confirm the code was pushed.
+. Switch to the **GitLab** tab and navigate to your repository at **{user} / ai-app-dev-{user} / parasol-chat** (not `rhdh/parasol-chat`, which is the base source) to confirm the code was pushed.
 +
 image::gitlab-pushed-commit.png[GitLab repository showing the pushed commit,link=self,window=blank,width=700]
 
