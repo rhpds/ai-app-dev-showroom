@@ -87,6 +87,10 @@ image::rhdh-component-overview.png[Component overview in Red Hat Developer Hub,l
 * **Virtual Machine**: A link into the OCP console to view details about your provisioned VM, including its status, resources, and connection info
 * **VNC Console**: Connect to your new virtual machine's desktop environment directly from Developer Hub
 
+TIP: If you went to Catalog on the left sidebar, click on **Owned** to view **your** components.
+
+image::rhdh-component-owned.png[Component overview in Red Hat Developer Hub,link=self,window=blank,width=700]
+
 === Verify
 
 You should now have:
