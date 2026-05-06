@@ -45,7 +45,7 @@ image::rhdh-template-catalog.png[Template catalog showing AI App Dev - Parasol C
 
 . Fill in the template form with the following values:
 +
-* **Application Name**: Leave as the default (`ai-app-dev`)
+* **Application Name**: Enter a unique name (`ai-app-dev-{user}` is a good convention)
 * **Virtual Machine Name**: Leave as the default (`developer-workstation`) or enter a custom name
 +
 NOTE: The virtual machine name must contain only lowercase letters, numbers, and hyphens, and must start and end with an alphanumeric character.
@@ -86,6 +86,10 @@ image::rhdh-component-overview.png[Component overview in Red Hat Developer Hub,l
 +
 * **Virtual Machine**: A link into the OCP console to view details about your provisioned VM, including its status, resources, and connection info
 * **VNC Console**: Connect to your new virtual machine's desktop environment directly from Developer Hub
+
+TIP: If you went to Catalog on the left sidebar, click on **Owned** to view **your** components.
+
+image::rhdh-component-owned.png[Component overview in Red Hat Developer Hub,link=self,window=blank,width=700]
 
 === Verify
 
